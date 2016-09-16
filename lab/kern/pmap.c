@@ -45,7 +45,7 @@ i386_detect_memory(void)
 		npages = (EXTPHYSMEM / PGSIZE) + npages_extmem;
 	else
 		npages = npages_basemem;
-
+	cprintf("Amount of physical memory (in pages) %u\n",npages);
 	cprintf("Physical memory: %uK available, base = %uK, extended = %uK\n",
 		npages * PGSIZE / 1024,
 		npages_basemem * PGSIZE / 1024,
@@ -99,13 +99,21 @@ boot_alloc(uint32_t n)
 	//
 	// LAB 2: Your code here.
 	if (n > 0){
-
+		cprintf("Nextfree before allocation %x\n", nextfree);
 		result = nextfree;
 		
-		nextfree = ROUNDUP((nextfree + n), PGSIZE);
+		nextfree = nextfree + n;
+
+		cprintf("Nextfree after allocation %x\n", nextfree);
+		cprintf ("Bytes to be allocated %u\n", ((nextfree - result)/8));
+
+		nextfree = ROUNDUP(nextfree , PGSIZE);
 		
+		cprintf ("Nextfree after rounding up to page size %x\n", nextfree);
+		cprintf ("Bytes allocated %u\n", ((nextfree - result)/8));
+
 		if (((uint32_t)nextfree - KERNBASE) > (npages * PGSIZE)){
-			panic("boot_alloc: Out of Memory\n");
+			panic("boot_alloc paniced: Out of Memory\n");
 					
 		}	
 	}
@@ -136,7 +144,7 @@ mem_init(void)
 	i386_detect_memory();
 
 	// Remove this line when you're ready to test this function.
-	panic("mem_init: This function is not finished\n");
+	//panic("mem_init: This function is not finished\n");
 
 	//////////////////////////////////////////////////////////////////////
 	// create initial page directory.
@@ -159,6 +167,10 @@ mem_init(void)
 	// array.  'npages' is the number of physical pages in memory.  Use memset
 	// to initialize all fields of each struct PageInfo to 0.
 	// Your code goes here:
+	
+	pages = boot_alloc (npages * sizeof (struct PageInfo));
+	
+	memset(pages, 0 , npages * sizeof (struct PageInfo));
 
 
 	//////////////////////////////////////////////////////////////////////
