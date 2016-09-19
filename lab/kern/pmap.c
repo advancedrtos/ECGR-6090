@@ -281,23 +281,20 @@ page_init(void)
 	// free pages!
 	size_t i;
 	
-	pages[0].pp_ref = 0;
-	pages[0].pp_link = NULL;
-	
-	page_free_list = NULL;
-	
-	for (i = 1; i < npages; i++) {
-		if (i >= (IOPHYSMEM/PGSIZE) && i < ((((uint32_t) boot_alloc(0)) - KERNBASE) / PGSIZE ))
-		{
-			pages[i].pp_ref = 0;
-			pages[i].pp_link = NULL;
-		}
-		else{
-		pages[i].pp_ref = 0;
-		pages[i].pp_link = page_free_list;
-		page_free_list = &pages[i];
-		}
-	}
+	 for (i = 0; i < npages; i++) {
+                if(i == 0 || (i >= (IOPHYSMEM/PGSIZE) && i < (EXTPHYSMEM/PGSIZE))) {
+                        pages[i].pp_ref = (uint16_t) 0;
+                        pages[i].pp_link = NULL;
+                }else if(i >= (EXTPHYSMEM/PGSIZE) && 
+                         i < (((uint32_t)(boot_alloc(0)-KERNBASE))/PGSIZE)) {
+                        pages[i].pp_ref = (uint16_t) 0;
+                        pages[i].pp_link = NULL;
+                }else{
+                        pages[i].pp_ref = 0;
+                        pages[i].pp_link = page_free_list;
+                        page_free_list = &pages[i];
+                }
+        }
 } 
 
 //
