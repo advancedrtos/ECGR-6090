@@ -46,6 +46,9 @@ i386_detect_memory(void)
 	else
 		npages = npages_basemem;
 	cprintf("Amount of physical memory (in pages) %u\n",npages);
+	cprintf("Page Size is %u\n", PGSIZE);
+	cprintf("Amount of base memory (in pages) is %u\n\n", npages_basemem);
+	
 	cprintf("Physical memory: %uK available, base = %uK, extended = %uK\n",
 		npages * PGSIZE / 1024,
 		npages_basemem * PGSIZE / 1024,
@@ -91,6 +94,7 @@ boot_alloc(uint32_t n)
 	if (!nextfree) {
 		extern char end[];
 		nextfree = ROUNDUP((char *) end, PGSIZE);
+		cprintf ("%x", end);
 	}
 
 	// Allocate a chunk large enough to hold 'n' bytes, then update
@@ -99,21 +103,22 @@ boot_alloc(uint32_t n)
 	//
 	// LAB 2: Your code here.
 	if (n > 0){
-		cprintf("Nextfree before allocation %x\n", nextfree);
+		cprintf("\nNextfree before allocation %x\n", nextfree);
 		result = nextfree;
-		
+		struct PageInfo *pp;
 		nextfree = nextfree + n;
 
 		cprintf("Nextfree after allocation %x\n", nextfree);
 		cprintf ("Bytes to be allocated %u\n", ((nextfree - result)/8));
-
+		 
 		nextfree = ROUNDUP(nextfree , PGSIZE);
+		
 		
 		cprintf ("Nextfree after rounding up to page size %x\n", nextfree);
 		cprintf ("Bytes allocated %u\n", ((nextfree - result)/8));
-
+		//cprintf ("Check%x\n ",((uint32_t)nextfree - KERNBASE));
 		if (((uint32_t)nextfree - KERNBASE) > (npages * PGSIZE)){
-			panic("boot_alloc paniced: Out of Memory\n");
+			panic("boot_alloc panicked: Out of Memory\n");
 					
 		}	
 	}
@@ -275,12 +280,25 @@ page_init(void)
 	// NB: DO NOT actually touch the physical memory corresponding to
 	// free pages!
 	size_t i;
-	for (i = 0; i < npages; i++) {
+	
+	pages[0].pp_ref = 0;
+	pages[0].pp_link = NULL;
+	
+	page_free_list = NULL;
+	
+	for (i = 1; i < npages; i++) {
+		if (i >= (IOPHYSMEM/PGSIZE) && i < ((((uint32_t) boot_alloc(0)) - KERNBASE) / PGSIZE ))
+		{
+			pages[i].pp_ref = 0;
+			pages[i].pp_link = NULL;
+		}
+		else{
 		pages[i].pp_ref = 0;
 		pages[i].pp_link = page_free_list;
 		page_free_list = &pages[i];
+		}
 	}
-}
+} 
 
 //
 // Allocates a physical page.  If (alloc_flags & ALLOC_ZERO), fills the entire
@@ -298,7 +316,19 @@ struct PageInfo *
 page_alloc(int alloc_flags)
 {
 	// Fill this function in
-	return 0;
+	struct PageInfo* allocated_page=NULL;
+        
+        if(page_free_list != NULL) {
+                allocated_page = page_free_list;
+                page_free_list = allocated_page->pp_link;
+                allocated_page->pp_link = NULL;
+                
+                if(alloc_flags & ALLOC_ZERO) {
+                        memset(page2kva(allocated_page), 0,PGSIZE);
+                }
+        }
+        return allocated_page;
+        
 }
 
 //
@@ -311,6 +341,19 @@ page_free(struct PageInfo *pp)
 	// Fill this function in
 	// Hint: You may want to panic if pp->pp_ref is nonzero or
 	// pp->pp_link is not NULL.
+	
+	if((pp->pp_link != NULL) || (pp->pp_ref !=0)) {
+                panic("ref count is not zero or pp_link is not NULL");
+        }
+        
+        else{
+
+
+                pp->pp_link = page_free_list;
+                page_free_list = pp;
+        }
+	
+				
 }
 
 //
