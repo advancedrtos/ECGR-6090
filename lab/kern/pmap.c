@@ -430,8 +430,8 @@ boot_map_region(pde_t *pgdir, uintptr_t va, size_t size, physaddr_t pa, int perm
 {
 	// Fill this function in
 	pte_t *ptep;
-	if(va+size > 0xffffffff)
-		return;
+	if(va+size < va)
+		panic("boot_map_region: Kernel panicked ");
 	for(int i=0; i<size; i+=PGSIZE) {
 		ptep = pgdir_walk(pgdir,(void*)(va+i),1);
 		if(ptep != NULL){
