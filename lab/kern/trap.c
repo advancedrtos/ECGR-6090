@@ -65,7 +65,46 @@ trap_init(void)
 	extern struct Segdesc gdt[];
 
 	// LAB 3: Your code here.
-
+	
+	void divide_error();
+	void debug_exception();
+	void non_maskable_interrupt();
+	void break_point();
+	void over_flow();
+	void bounds_check();
+	void illegal_opcode();
+	void device_not_available();
+	void double_fault();
+	void task_segment_switch();
+	void segment_not_present();
+	void stack_exception();
+	void general_protection_fault();
+	void page_fault();
+	void floating_point_error();
+	void alignment_check();
+	void machine_check();
+	void simd_floating_point_error();
+	
+	
+	SETGATE(idt[T_DIVIDE],0,GD_KT,divide_error,0);
+	SETGATE(idt[T_DEBUG], 0, GD_KT, debug_exception, 0);
+	SETGATE(idt[T_NMI], 0, GD_KT, non_maskable_interrupt, 0);
+	SETGATE(idt[T_BRKPT], 0, GD_KT, break_point, 3);
+	SETGATE(idt[T_OFLOW], 0, GD_KT, over_flow, 0);
+	SETGATE(idt[T_BOUND], 0, GD_KT, bounds_check, 0);
+	SETGATE(idt[T_ILLOP], 0, GD_KT, illegal_opcode, 0);
+	SETGATE(idt[T_DEVICE], 0, GD_KT, device_not_available, 0);
+	SETGATE(idt[T_DBLFLT], 0, GD_KT, double_fault, 0);
+	SETGATE(idt[T_TSS], 0, GD_KT, task_segment_switch, 0);
+	SETGATE(idt[T_SEGNP], 0, GD_KT, segment_not_present, 0);
+	SETGATE(idt[T_STACK], 0, GD_KT, stack_exception, 0);
+	SETGATE(idt[T_GPFLT], 0, GD_KT, general_protection_fault, 0);
+	SETGATE(idt[T_PGFLT], 0, GD_KT, page_fault, 0);
+	SETGATE(idt[T_FPERR], 0, GD_KT, floating_point_error, 0);
+	SETGATE(idt[T_ALIGN], 0, GD_KT, alignment_check , 0);
+	SETGATE(idt[T_MCHK], 0, GD_KT, machine_check, 0);
+	SETGATE(idt[T_SIMDERR], 0, GD_KT, simd_floating_point_error, 0);
+	
 	// Per-CPU setup 
 	trap_init_percpu();
 }
@@ -143,7 +182,13 @@ trap_dispatch(struct Trapframe *tf)
 {
 	// Handle processor exceptions.
 	// LAB 3: Your code here.
-
+	switch (tf->tf_trapno){
+		case T_PGFLT:
+			page_fault_handler(tf);
+			break;
+	}
+	
+	
 	// Unexpected trap: The user process or the kernel has a bug.
 	print_trapframe(tf);
 	if (tf->tf_cs == GD_KT)
@@ -152,6 +197,7 @@ trap_dispatch(struct Trapframe *tf)
 		env_destroy(curenv);
 		return;
 	}
+	
 }
 
 void

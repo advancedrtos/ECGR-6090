@@ -1,9 +1,9 @@
 + ld obj/kern/kernel
 + mk obj/kern/kernel.img
 
-(process:10110): GLib-WARNING **: /build/glib2.0-7IO_Yw/glib2.0-2.48.1/./glib/gmem.c:483: custom memory allocation vtable not supported
+(process:9665): GLib-WARNING **: /build/glib2.0-7IO_Yw/glib2.0-2.48.1/./glib/gmem.c:483: custom memory allocation vtable not supported
 
-(process:10112): GLib-WARNING **: /build/glib2.0-7IO_Yw/glib2.0-2.48.1/./glib/gmem.c:483: custom memory allocation vtable not supported
+(process:9667): GLib-WARNING **: /build/glib2.0-7IO_Yw/glib2.0-2.48.1/./glib/gmem.c:483: custom memory allocation vtable not supported
 6828 decimal is 15254 octal!
 Amount of physical memory (in pages) 16639
 Page Size is 4096
@@ -38,23 +38,23 @@ Incoming TRAP frame at 0xefffffbc
 TRAP frame at 0xf0197000
   edi  0x00000000
   esi  0x00000000
-  ebp  0xeebfdfb0
+  ebp  0xeebfdfd0
   oesp 0xefffffdc
   ebx  0x00000000
-  edx  0xf010000c
-  ecx  0x00000064
+  edx  0x00000000
+  ecx  0x00000000
   eax  0x00000000
   es   0x----0023
   ds   0x----0023
-  trap 0x0000000d General Protection
-  err  0x00000182
-  eip  0x008000a9
+  trap 0x00000003 Breakpoint
+  err  0x00000000
+  eip  0x00800037
   cs   0x----001b
-  flag 0x00000086
-  esp  0xeebfdfa4
+  flag 0x00000082
+  esp  0xeebfdfd0
   ss   0x----0023
 [00001000] free env 00001000
 Destroyed the only environment - nothing more to do!
 Welcome to the JOS kernel monitor!
 Type 'help' for a list of commands.
-qemu: terminating on signal 15 from pid 10026
+qemu: terminating on signal 15 from pid 9581
