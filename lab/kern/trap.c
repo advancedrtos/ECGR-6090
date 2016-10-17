@@ -84,6 +84,7 @@ trap_init(void)
 	void alignment_check();
 	void machine_check();
 	void simd_floating_point_error();
+	int sys_call();
 	
 	
 	SETGATE(idt[T_DIVIDE],0,GD_KT,divide_error,0);
@@ -104,6 +105,7 @@ trap_init(void)
 	SETGATE(idt[T_ALIGN], 0, GD_KT, alignment_check , 0);
 	SETGATE(idt[T_MCHK], 0, GD_KT, machine_check, 0);
 	SETGATE(idt[T_SIMDERR], 0, GD_KT, simd_floating_point_error, 0);
+	SETGATE(idt[T_SYSCALL], 0, GD_KT, sys_call, 3);
 	
 	// Per-CPU setup 
 	trap_init_percpu();
@@ -180,11 +182,21 @@ print_regs(struct PushRegs *regs)
 static void
 trap_dispatch(struct Trapframe *tf)
 {
+	int32_t ret;
 	// Handle processor exceptions.
 	// LAB 3: Your code here.
 	switch (tf->tf_trapno){
 		case T_PGFLT:
 			page_fault_handler(tf);
+			break;
+		case T_BRKPT:
+			monitor(tf);
+			break;
+		case T_SYSCALL:
+			ret = syscall(tf->tf_regs.reg_eax, tf->tf_regs.reg_edx, tf->tf_regs.reg_ecx, tf->tf_regs.reg_ebx,
+				tf->tf_regs.reg_edi, tf->tf_regs.reg_esi);
+			tf->tf_regs.reg_eax = ret;
+			return;
 			break;
 	}
 	

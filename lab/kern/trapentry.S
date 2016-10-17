@@ -62,6 +62,7 @@
         TRAPHANDLER(stack_exception, 12)
         TRAPHANDLER(general_protection_fault, 13)
         TRAPHANDLER(page_fault, 14)
+        TRAPHANDLER_NOEC(sys_call, 48)
     
         TRAPHANDLER_NOEC(floating_point_error, 16)
         TRAPHANDLER(alignment_check, 17)
