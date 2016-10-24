@@ -1,60 +1,10 @@
 + ld obj/kern/kernel
 + mk obj/kern/kernel.img
 
-(process:10110): GLib-WARNING **: /build/glib2.0-7IO_Yw/glib2.0-2.48.1/./glib/gmem.c:483: custom memory allocation vtable not supported
+(process:25196): GLib-WARNING **: /build/glib2.0-7IO_Yw/glib2.0-2.48.1/./glib/gmem.c:483: custom memory allocation vtable not supported
 
-(process:10112): GLib-WARNING **: /build/glib2.0-7IO_Yw/glib2.0-2.48.1/./glib/gmem.c:483: custom memory allocation vtable not supported
+(process:25198): GLib-WARNING **: /build/glib2.0-7IO_Yw/glib2.0-2.48.1/./glib/gmem.c:483: custom memory allocation vtable not supported
 6828 decimal is 15254 octal!
-Amount of physical memory (in pages) 16639
-Page Size is 4096
-Amount of base memory (in pages) is 160
-
 Physical memory: 66556K available, base = 640K, extended = 65532K
-f0174c50
-Nextfree before allocation f0175000
-Nextfree after allocation f0176000
-Bytes to be allocated 512
-Nextfree after rounding up to page size f0176000
-Bytes allocated 512
-
-Nextfree before allocation f0176000
-Nextfree after allocation f01967f8
-Bytes to be allocated 16639
-Nextfree after rounding up to page size f0197000
-Bytes allocated 16896
-
-Nextfree before allocation f0197000
-Nextfree after allocation f01af000
-Bytes to be allocated 12288
-Nextfree after rounding up to page size f01af000
-Bytes allocated 12288
-check_page_alloc() succeeded!
-check_page() succeeded!
-check_kern_pgdir() succeeded!
-check_page_installed_pgdir() succeeded!
-PDX(UTOP) 955
-[00000000] new env 00001000
-Incoming TRAP frame at 0xefffffbc
-TRAP frame at 0xf0197000
-  edi  0x00000000
-  esi  0x00000000
-  ebp  0xeebfdfb0
-  oesp 0xefffffdc
-  ebx  0x00000000
-  edx  0xf010000c
-  ecx  0x00000064
-  eax  0x00000000
-  es   0x----0023
-  ds   0x----0023
-  trap 0x0000000d General Protection
-  err  0x00000182
-  eip  0x008000a9
-  cs   0x----001b
-  flag 0x00000086
-  esp  0xeebfdfa4
-  ss   0x----0023
-[00001000] free env 00001000
-Destroyed the only environment - nothing more to do!
-Welcome to the JOS kernel monitor!
-Type 'help' for a list of commands.
-qemu: terminating on signal 15 from pid 10026
+kernel panic on CPU 0 at kern/pmap.c:750: assertion failed: page2pa(pp) != MPENTRY_PADDR
+Welcome to the JOqemu: terminating on signal 15 from pid 25112

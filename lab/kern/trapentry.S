@@ -4,6 +4,7 @@
 #include <inc/memlayout.h>
 #include <inc/trap.h>
 
+#include <kern/picirq.h>
 
 
 ###################################################################
@@ -62,12 +63,12 @@
         TRAPHANDLER(stack_exception, 12)
         TRAPHANDLER(general_protection_fault, 13)
         TRAPHANDLER(page_fault, 14)
-        TRAPHANDLER_NOEC(sys_call, 48)
     
         TRAPHANDLER_NOEC(floating_point_error, 16)
         TRAPHANDLER(alignment_check, 17)
         TRAPHANDLER_NOEC(machine_check, 18)
         TRAPHANDLER_NOEC(simd_floating_point_error, 19)
+        TRAPHANDLER_NOEC(system_call, 48)
     
 /*
  * Lab 3: Your code here for _alltraps
@@ -78,6 +79,7 @@ _alltraps:
     pushl %ds
     
     pushl %es
+    
     pushal
     
     movl $GD_KD,%eax
