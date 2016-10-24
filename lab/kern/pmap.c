@@ -424,7 +424,7 @@ pgdir_walk(pde_t *pgdir, const void *va, int create)
 				return NULL;
 			}else{
 				new_pg_table->pp_ref += 1;
-				pgdir[PDX(va)] = (page2pa(new_pg_table) | PTE_W | PTE_P);
+				pgdir[PDX(va)] = (page2pa(new_pg_table) | PTE_P);
 			}
 		}
 	}
@@ -455,6 +455,7 @@ boot_map_region(pde_t *pgdir, uintptr_t va, size_t size, physaddr_t pa, int perm
 		ptep = pgdir_walk(pgdir,(void*)(va+i),1);
 		if(ptep != NULL){
 			*ptep = ((pa+i) | perm | PTE_P);
+			pgdir[PDX(va+i)] |= perm | PTE_P;
 		}
 	}
 }
