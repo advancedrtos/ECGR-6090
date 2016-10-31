@@ -297,6 +297,13 @@ mem_init_mp(void)
 	//     Permissions: kernel RW, user NONE
 	//
 	// LAB 4: Your code here:
+	uint32_t kstacktop_i = KSTACKTOP;
+	int i=0;
+	for(i=0; i<NCPU; i++) 
+	{
+		boot_map_region(kern_pgdir, kstacktop_i - KSTKSIZE, KSTKSIZE, PADDR(percpu_kstacks[i]), PTE_W | PTE_P);
+		kstacktop_i = kstacktop_i - (KSTKSIZE + KSTKGAP);
+	}
 
 }
 
@@ -346,7 +353,10 @@ page_init(void)
                          i < (((uint32_t)(boot_alloc(0)-KERNBASE))/PGSIZE)) {
                         pages[i].pp_ref = (uint16_t) 0;
                         pages[i].pp_link = NULL;
-                }else{
+                }else if(i == (MPENTRY_PADDR/PGSIZE)) {
+			pages[i].pp_ref = (uint16_t) 0;
+                        pages[i].pp_link = NULL;
+		}else{
                         pages[i].pp_ref = 0;
                         pages[i].pp_link = page_free_list;
                         page_free_list = &pages[i];
@@ -458,7 +468,7 @@ pgdir_walk(pde_t *pgdir, const void *va, int create)
 				return NULL;
 			}else{
 				new_pg_table->pp_ref += 1;
-				pgdir[PDX(va)] = (page2pa(new_pg_table) | PTE_W | PTE_P);
+				pgdir[PDX(va)] = (page2pa(new_pg_table) | PTE_P);
 			}
 		}
 	}
@@ -489,6 +499,7 @@ boot_map_region(pde_t *pgdir, uintptr_t va, size_t size, physaddr_t pa, int perm
 		ptep = pgdir_walk(pgdir,(void*)(va+i),1);
 		if(ptep != NULL){
 			*ptep = ((pa+i) | perm | PTE_P);
+			pgdir[PDX(va+i)] |= perm | PTE_P;
 		}
 	}
 }
@@ -642,7 +653,15 @@ mmio_map_region(physaddr_t pa, size_t size)
 	//
 	// Your code here:
 		
-	panic("mmio_map_region not implemented");
+	size = ROUNDUP(size,PGSIZE);
+	if(base+size > MMIOLIM)
+	{
+		panic("Requested memory cannot be mapped");
+	}
+	boot_map_region(kern_pgdir, base, size, pa, PTE_PCD | PTE_PWT | PTE_W);
+	uintptr_t mapped_base = base;
+	base += size;
+	return((void *)mapped_base);
 }
 
 static uintptr_t user_mem_check_addr;
@@ -908,14 +927,16 @@ check_kern_pgdir(void)
 		case PDX(KSTACKTOP-1):
 		case PDX(UPAGES):
 		case PDX(UENVS):
+		case PDX(MMIOBASE):
 			assert(pgdir[i] & PTE_P);
 			break;
 		default:
 			if (i >= PDX(KERNBASE)) {
 				assert(pgdir[i] & PTE_P);
 				assert(pgdir[i] & PTE_W);
-			} else
+			} else {
 				assert(pgdir[i] == 0);
+			}
 			break;
 		}
 	}
