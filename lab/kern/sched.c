@@ -11,7 +11,8 @@ void sched_halt(void);
 void
 sched_yield(void)
 {
-	struct Env *idle;
+	struct Env *idle,*tmp;
+	int i =0;
 
 	// Implement simple round-robin scheduling.
 	//
@@ -29,6 +30,48 @@ sched_yield(void)
 	// below to halt the cpu.
 
 	// LAB 4: Your code here.
+	if( curenv == NULL)
+	{
+		idle = envs;
+		//tmp = envs+(NENV*sizeof(struct Env));
+	} else {
+		idle = curenv+1;//sizeof(struct Env);
+		//tmp = curenv;
+	}
+	while(i<1024)
+	{
+		if(idle->env_status == ENV_RUNNABLE)
+		{
+			env_run(idle);
+			return;
+		}
+		//idle ++;//= sizeof(struct Env);
+		if(idle >= (envs+NENV))
+//		if(ENVX(idle->env_id) == (NENV-1))
+                {
+                        idle = envs;
+                } else {
+			idle++;
+		}
+		i++;
+	}
+	if(curenv != NULL && curenv->env_status == ENV_RUNNING)
+	{
+		env_run(curenv);
+	}
+
+	/*int i;
+	int current_env_idx = curenv ? ENVX(curenv->env_id) : 0;
+	int idx = (current_env_idx + 1) % NENV; // start by looking at the next process
+
+		for (i = 0; i < NENV; i++) {
+			if (envs[idx].env_status == ENV_RUNNABLE )
+				env_run(&envs[idx]);
+			idx = (idx + 1) % NENV;
+		}
+	
+	if (curenv != NULL && curenv->env_status == ENV_RUNNING)
+env_run(curenv);*/
 
 	// sched_halt never returns
 	sched_halt();

@@ -232,17 +232,14 @@ trap_dispatch(struct Trapframe *tf)
 	// LAB 4: Your code here.
 
 	if (tf->tf_trapno == T_PGFLT) {
-		cprintf("PAGE FAULT\n");
 		page_fault_handler(tf);
 		return;
 	}
 	if (tf->tf_trapno == T_BRKPT) {
-		cprintf("BREAK POINT\n");
 		monitor(tf);
 		return;
 	}
 	if (tf->tf_trapno == T_SYSCALL) {
-		cprintf("SYSTEM CALL\n");
 		tf->tf_regs.reg_eax = 
 			syscall(tf->tf_regs.reg_eax, tf->tf_regs.reg_edx, tf->tf_regs.reg_ecx,
 				tf->tf_regs.reg_ebx, tf->tf_regs.reg_edi, tf->tf_regs.reg_esi);
@@ -369,11 +366,39 @@ page_fault_handler(struct Trapframe *tf)
 	//   (the 'tf' variable points at 'curenv->env_tf').
 
 	// LAB 4: Your code here.
+	uint32_t uxtop;
+	struct UTrapframe *uxframe;
+	if(curenv->env_pgfault_upcall == NULL)
+	{
+		cprintf("[%08x] user fault va %08x ip %08x\n",
+                curenv->env_id, fault_va, tf->tf_eip);
+		print_trapframe(tf);
+		env_destroy(curenv);
+	} else {
+		if(tf->tf_esp < USTACKTOP)
+		{
+			uxtop = UXSTACKTOP - sizeof(struct UTrapframe);
+			user_mem_assert(curenv, (const void *) uxtop, sizeof(struct UTrapframe), PTE_W|PTE_P);
+		} else {
+			uxtop = tf->tf_esp - sizeof(struct UTrapframe) - 4; 
+			user_mem_assert(curenv, (const void *) uxtop, sizeof(struct UTrapframe)+4, PTE_W|PTE_P);
+		}
+//		cprintf("SRHS: uxtop value is %08x \n",uxtop);
+//		user_mem_assert(curenv, (const void *) uxtop, PGSIZE, PTE_W|PTE_P);
+		
+		uxframe = (struct UTrapframe *) uxtop;
+		uxframe->utf_fault_va = fault_va;
+		uxframe->utf_err = tf->tf_err;
+		uxframe->utf_regs = tf->tf_regs;
+		uxframe->utf_eip = tf->tf_eip;
+		uxframe->utf_eflags = tf->tf_eflags;
+		uxframe->utf_esp = tf->tf_esp;
 
-	// Destroy the environment that caused the fault.
-	cprintf("[%08x] user fault va %08x ip %08x\n",
-		curenv->env_id, fault_va, tf->tf_eip);
-	print_trapframe(tf);
-	env_destroy(curenv);
+		tf->tf_esp = (uintptr_t)uxframe;
+		tf->tf_eip = (uintptr_t) curenv->env_pgfault_upcall;
+
+		env_run(curenv);
+	}
+
 }
 
