@@ -69,6 +69,33 @@ _pgfault_upcall:
 	// Restore the trap-time registers.  After you do this, you
 	// can no longer modify any general-purpose registers.
 	// LAB 4: Your code here.
+/*
+	movl 0x28(%esp),%eax
+	movl %esp,%ebx
+	movl %eax,0x34(%ebx)
+	subl $0x4,0x30(%ebx)
+	popl %eax
+	popl %eax
+	popal
+	addl $0x4,%esp
+	popfl
+	popl %esp
+	ret
+*/
+movl 0x28(%esp), %eax
+movl %esp, %ebx
+movl 0x30(%esp), %esp
+pushl %eax
+movl %esp, 0x30(%ebx)
+movl %ebx, %esp
+//popl %eax
+//popl %eax
+addl $0x8, %esp
+popal
+addl $0x4, %esp
+popfl
+popl %esp
+ret
 
 	// Restore eflags from the stack.  After you do this, you can
 	// no longer use arithmetic operations or anything else that
