@@ -72,10 +72,12 @@ _pgfault_upcall:
 /*
 	movl 0x28(%esp),%eax
 	movl %esp,%ebx
-	movl %eax,0x34(%ebx)
-	subl $0x4,0x30(%ebx)
-	popl %eax
-	popl %eax
+	addl $0x38, %esp
+	pushl %eax	
+	//movl %eax,0x34(%ebx)
+	//subl $0x4,0x30(%ebx)
+	movl %esp, 0x28(%ebx)
+	addl $0x8, %esp
 	popal
 	addl $0x4,%esp
 	popfl
@@ -88,8 +90,6 @@ movl 0x30(%esp), %esp
 pushl %eax
 movl %esp, 0x30(%ebx)
 movl %ebx, %esp
-//popl %eax
-//popl %eax
 addl $0x8, %esp
 popal
 addl $0x4, %esp
