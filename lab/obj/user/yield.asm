@@ -1,5 +1,5 @@
 
-obj/user/yield:     file format elf32-i386
+obj/user/yield.debug:     file format elf32-i386
 
 
 Disassembly of section .text:
@@ -48,7 +48,7 @@ umain(int argc, char **argv)
   80003a:	a1 04 20 80 00       	mov    0x802004,%eax
   80003f:	8b 40 48             	mov    0x48(%eax),%eax
   800042:	50                   	push   %eax
-  800043:	68 a0 0f 80 00       	push   $0x800fa0
+  800043:	68 e0 0f 80 00       	push   $0x800fe0
   800048:	e8 38 01 00 00       	call   800185 <cprintf>
   80004d:	83 c4 10             	add    $0x10,%esp
 	for (i = 0; i < 5; i++) {
@@ -68,7 +68,7 @@ umain(int argc, char **argv)
   800062:	83 ec 04             	sub    $0x4,%esp
   800065:	53                   	push   %ebx
   800066:	50                   	push   %eax
-  800067:	68 c0 0f 80 00       	push   $0x800fc0
+  800067:	68 00 10 80 00       	push   $0x801000
   80006c:	e8 14 01 00 00       	call   800185 <cprintf>
 umain(int argc, char **argv)
 {
@@ -89,7 +89,7 @@ umain(int argc, char **argv)
   800081:	8b 40 48             	mov    0x48(%eax),%eax
   800084:	83 ec 08             	sub    $0x8,%esp
   800087:	50                   	push   %eax
-  800088:	68 ec 0f 80 00       	push   $0x800fec
+  800088:	68 2c 10 80 00       	push   $0x80102c
   80008d:	e8 f3 00 00 00       	call   800185 <cprintf>
 }
   800092:	83 c4 10             	add    $0x10,%esp
@@ -158,6 +158,7 @@ exit(void)
   8000e0:	55                   	push   %ebp
   8000e1:	89 e5                	mov    %esp,%ebp
   8000e3:	83 ec 14             	sub    $0x14,%esp
+	//close_all();
 	sys_env_destroy(0);
   8000e6:	6a 00                	push   $0x0
   8000e8:	e8 a1 09 00 00       	call   800a8e <sys_env_destroy>
@@ -305,7 +306,7 @@ printnum(void (*putch)(int, void*), void *putdat,
   8001df:	ff 75 e0             	pushl  -0x20(%ebp)
   8001e2:	ff 75 dc             	pushl  -0x24(%ebp)
   8001e5:	ff 75 d8             	pushl  -0x28(%ebp)
-  8001e8:	e8 23 0b 00 00       	call   800d10 <__udivdi3>
+  8001e8:	e8 63 0b 00 00       	call   800d50 <__udivdi3>
   8001ed:	83 c4 18             	add    $0x18,%esp
   8001f0:	52                   	push   %edx
   8001f1:	50                   	push   %eax
@@ -346,9 +347,9 @@ printnum(void (*putch)(int, void*), void *putdat,
   800222:	ff 75 e0             	pushl  -0x20(%ebp)
   800225:	ff 75 dc             	pushl  -0x24(%ebp)
   800228:	ff 75 d8             	pushl  -0x28(%ebp)
-  80022b:	e8 10 0c 00 00       	call   800e40 <__umoddi3>
+  80022b:	e8 50 0c 00 00       	call   800e80 <__umoddi3>
   800230:	83 c4 14             	add    $0x14,%esp
-  800233:	0f be 80 15 10 80 00 	movsbl 0x801015(%eax),%eax
+  800233:	0f be 80 55 10 80 00 	movsbl 0x801055(%eax),%eax
   80023a:	50                   	push   %eax
   80023b:	ff d7                	call   *%edi
 }
@@ -525,7 +526,7 @@ vprintfmt(void (*putch)(int, void*), void *putdat, const char *fmt, va_list ap)
   800324:	3c 55                	cmp    $0x55,%al
   800326:	0f 87 1a 03 00 00    	ja     800646 <vprintfmt+0x38a>
   80032c:	0f b6 c0             	movzbl %al,%eax
-  80032f:	ff 24 85 e0 10 80 00 	jmp    *0x8010e0(,%eax,4)
+  80032f:	ff 24 85 a0 11 80 00 	jmp    *0x8011a0(,%eax,4)
   800336:	8b 7d e4             	mov    -0x1c(%ebp),%edi
 			padc = '-';
 			goto reswitch;
@@ -690,14 +691,14 @@ vprintfmt(void (*putch)(int, void*), void *putdat, const char *fmt, va_list ap)
 			if (err < 0)
 				err = -err;
 			if (err >= MAXERROR || (p = error_string[err]) == NULL)
-  8003ee:	83 f8 09             	cmp    $0x9,%eax
+  8003ee:	83 f8 0f             	cmp    $0xf,%eax
   8003f1:	7f 0b                	jg     8003fe <vprintfmt+0x142>
-  8003f3:	8b 14 85 40 12 80 00 	mov    0x801240(,%eax,4),%edx
+  8003f3:	8b 14 85 00 13 80 00 	mov    0x801300(,%eax,4),%edx
   8003fa:	85 d2                	test   %edx,%edx
   8003fc:	75 18                	jne    800416 <vprintfmt+0x15a>
 				printfmt(putch, putdat, "error %d", err);
   8003fe:	50                   	push   %eax
-  8003ff:	68 2d 10 80 00       	push   $0x80102d
+  8003ff:	68 6d 10 80 00       	push   $0x80106d
   800404:	53                   	push   %ebx
   800405:	56                   	push   %esi
   800406:	e8 94 fe ff ff       	call   80029f <printfmt>
@@ -719,7 +720,7 @@ vprintfmt(void (*putch)(int, void*), void *putdat, const char *fmt, va_list ap)
 			else
 				printfmt(putch, putdat, "%s", p);
   800416:	52                   	push   %edx
-  800417:	68 36 10 80 00       	push   $0x801036
+  800417:	68 76 10 80 00       	push   $0x801076
   80041c:	53                   	push   %ebx
   80041d:	56                   	push   %esi
   80041e:	e8 7c fe ff ff       	call   80029f <printfmt>
@@ -744,7 +745,7 @@ vprintfmt(void (*putch)(int, void*), void *putdat, const char *fmt, va_list ap)
   800437:	8b 38                	mov    (%eax),%edi
 				p = "(null)";
   800439:	85 ff                	test   %edi,%edi
-  80043b:	b8 26 10 80 00       	mov    $0x801026,%eax
+  80043b:	b8 66 10 80 00       	mov    $0x801066,%eax
   800440:	0f 44 f8             	cmove  %eax,%edi
 			if (width > 0 && padc != '-')
   800443:	83 7d e0 00          	cmpl   $0x0,-0x20(%ebp)
@@ -2079,10 +2080,10 @@ sys_env_destroy(envid_t envid)
   800ab0:	83 ec 0c             	sub    $0xc,%esp
   800ab3:	50                   	push   %eax
   800ab4:	6a 03                	push   $0x3
-  800ab6:	68 68 12 80 00       	push   $0x801268
+  800ab6:	68 5f 13 80 00       	push   $0x80135f
   800abb:	6a 23                	push   $0x23
-  800abd:	68 85 12 80 00       	push   $0x801285
-  800ac2:	e8 f5 01 00 00       	call   800cbc <_panic>
+  800abd:	68 7c 13 80 00       	push   $0x80137c
+  800ac2:	e8 37 02 00 00       	call   800cfe <_panic>
 
 int
 sys_env_destroy(envid_t envid)
@@ -2148,7 +2149,7 @@ sys_yield(void)
 
 	asm volatile("int %1\n"
   800af4:	ba 00 00 00 00       	mov    $0x0,%edx
-  800af9:	b8 0a 00 00 00       	mov    $0xa,%eax
+  800af9:	b8 0b 00 00 00       	mov    $0xb,%eax
   800afe:	89 d1                	mov    %edx,%ecx
   800b00:	89 d3                	mov    %edx,%ebx
   800b02:	89 d7                	mov    %edx,%edi
@@ -2202,10 +2203,10 @@ sys_page_alloc(envid_t envid, void *va, int perm)
   800b31:	83 ec 0c             	sub    $0xc,%esp
   800b34:	50                   	push   %eax
   800b35:	6a 04                	push   $0x4
-  800b37:	68 68 12 80 00       	push   $0x801268
+  800b37:	68 5f 13 80 00       	push   $0x80135f
   800b3c:	6a 23                	push   $0x23
-  800b3e:	68 85 12 80 00       	push   $0x801285
-  800b43:	e8 74 01 00 00       	call   800cbc <_panic>
+  800b3e:	68 7c 13 80 00       	push   $0x80137c
+  800b43:	e8 b6 01 00 00       	call   800cfe <_panic>
 
 int
 sys_page_alloc(envid_t envid, void *va, int perm)
@@ -2255,10 +2256,10 @@ sys_page_map(envid_t srcenv, void *srcva, envid_t dstenv, void *dstva, int perm)
   800b73:	83 ec 0c             	sub    $0xc,%esp
   800b76:	50                   	push   %eax
   800b77:	6a 05                	push   $0x5
-  800b79:	68 68 12 80 00       	push   $0x801268
+  800b79:	68 5f 13 80 00       	push   $0x80135f
   800b7e:	6a 23                	push   $0x23
-  800b80:	68 85 12 80 00       	push   $0x801285
-  800b85:	e8 32 01 00 00       	call   800cbc <_panic>
+  800b80:	68 7c 13 80 00       	push   $0x80137c
+  800b85:	e8 74 01 00 00       	call   800cfe <_panic>
 
 int
 sys_page_map(envid_t srcenv, void *srcva, envid_t dstenv, void *dstva, int perm)
@@ -2308,10 +2309,10 @@ sys_page_unmap(envid_t envid, void *va)
   800bb5:	83 ec 0c             	sub    $0xc,%esp
   800bb8:	50                   	push   %eax
   800bb9:	6a 06                	push   $0x6
-  800bbb:	68 68 12 80 00       	push   $0x801268
+  800bbb:	68 5f 13 80 00       	push   $0x80135f
   800bc0:	6a 23                	push   $0x23
-  800bc2:	68 85 12 80 00       	push   $0x801285
-  800bc7:	e8 f0 00 00 00       	call   800cbc <_panic>
+  800bc2:	68 7c 13 80 00       	push   $0x80137c
+  800bc7:	e8 32 01 00 00       	call   800cfe <_panic>
 
 int
 sys_page_unmap(envid_t envid, void *va)
@@ -2363,10 +2364,10 @@ sys_env_set_status(envid_t envid, int status)
   800bf7:	83 ec 0c             	sub    $0xc,%esp
   800bfa:	50                   	push   %eax
   800bfb:	6a 08                	push   $0x8
-  800bfd:	68 68 12 80 00       	push   $0x801268
+  800bfd:	68 5f 13 80 00       	push   $0x80135f
   800c02:	6a 23                	push   $0x23
-  800c04:	68 85 12 80 00       	push   $0x801285
-  800c09:	e8 ae 00 00 00       	call   800cbc <_panic>
+  800c04:	68 7c 13 80 00       	push   $0x80137c
+  800c09:	e8 f0 00 00 00       	call   800cfe <_panic>
 
 int
 sys_env_set_status(envid_t envid, int status)
@@ -2380,10 +2381,10 @@ sys_env_set_status(envid_t envid, int status)
   800c14:	5d                   	pop    %ebp
   800c15:	c3                   	ret    
 
-00800c16 <sys_env_set_pgfault_upcall>:
+00800c16 <sys_env_set_trapframe>:
 
 int
-sys_env_set_pgfault_upcall(envid_t envid, void *upcall)
+sys_env_set_trapframe(envid_t envid, struct Trapframe *tf)
 {
   800c16:	55                   	push   %ebp
   800c17:	89 e5                	mov    %esp,%ebp
@@ -2411,20 +2412,20 @@ sys_env_set_pgfault_upcall(envid_t envid, void *upcall)
 
 	if(check && ret > 0)
   800c35:	85 c0                	test   %eax,%eax
-  800c37:	7e 17                	jle    800c50 <sys_env_set_pgfault_upcall+0x3a>
+  800c37:	7e 17                	jle    800c50 <sys_env_set_trapframe+0x3a>
 		panic("syscall %d returned %d (> 0)", num, ret);
   800c39:	83 ec 0c             	sub    $0xc,%esp
   800c3c:	50                   	push   %eax
   800c3d:	6a 09                	push   $0x9
-  800c3f:	68 68 12 80 00       	push   $0x801268
+  800c3f:	68 5f 13 80 00       	push   $0x80135f
   800c44:	6a 23                	push   $0x23
-  800c46:	68 85 12 80 00       	push   $0x801285
-  800c4b:	e8 6c 00 00 00       	call   800cbc <_panic>
+  800c46:	68 7c 13 80 00       	push   $0x80137c
+  800c4b:	e8 ae 00 00 00       	call   800cfe <_panic>
 
 int
-sys_env_set_pgfault_upcall(envid_t envid, void *upcall)
+sys_env_set_trapframe(envid_t envid, struct Trapframe *tf)
 {
-	return syscall(SYS_env_set_pgfault_upcall, 1, envid, (uint32_t) upcall, 0, 0, 0);
+	return syscall(SYS_env_set_trapframe, 1, envid, (uint32_t) tf, 0, 0, 0);
 }
   800c50:	8d 65 f4             	lea    -0xc(%ebp),%esp
   800c53:	5b                   	pop    %ebx
@@ -2433,417 +2434,469 @@ sys_env_set_pgfault_upcall(envid_t envid, void *upcall)
   800c56:	5d                   	pop    %ebp
   800c57:	c3                   	ret    
 
-00800c58 <sys_ipc_try_send>:
+00800c58 <sys_env_set_pgfault_upcall>:
 
 int
-sys_ipc_try_send(envid_t envid, uint32_t value, void *srcva, int perm)
+sys_env_set_pgfault_upcall(envid_t envid, void *upcall)
 {
   800c58:	55                   	push   %ebp
   800c59:	89 e5                	mov    %esp,%ebp
   800c5b:	57                   	push   %edi
   800c5c:	56                   	push   %esi
   800c5d:	53                   	push   %ebx
+  800c5e:	83 ec 0c             	sub    $0xc,%esp
 	//
 	// The last clause tells the assembler that this can
 	// potentially change the condition codes and arbitrary
 	// memory locations.
 
 	asm volatile("int %1\n"
-  800c5e:	be 00 00 00 00       	mov    $0x0,%esi
-  800c63:	b8 0b 00 00 00       	mov    $0xb,%eax
-  800c68:	8b 4d 0c             	mov    0xc(%ebp),%ecx
-  800c6b:	8b 55 08             	mov    0x8(%ebp),%edx
-  800c6e:	8b 5d 10             	mov    0x10(%ebp),%ebx
-  800c71:	8b 7d 14             	mov    0x14(%ebp),%edi
-  800c74:	cd 30                	int    $0x30
-
-int
-sys_ipc_try_send(envid_t envid, uint32_t value, void *srcva, int perm)
-{
-	return syscall(SYS_ipc_try_send, 0, envid, value, (uint32_t) srcva, perm, 0);
-}
-  800c76:	5b                   	pop    %ebx
-  800c77:	5e                   	pop    %esi
-  800c78:	5f                   	pop    %edi
-  800c79:	5d                   	pop    %ebp
-  800c7a:	c3                   	ret    
-
-00800c7b <sys_ipc_recv>:
-
-int
-sys_ipc_recv(void *dstva)
-{
-  800c7b:	55                   	push   %ebp
-  800c7c:	89 e5                	mov    %esp,%ebp
-  800c7e:	57                   	push   %edi
-  800c7f:	56                   	push   %esi
-  800c80:	53                   	push   %ebx
-  800c81:	83 ec 0c             	sub    $0xc,%esp
-	//
-	// The last clause tells the assembler that this can
-	// potentially change the condition codes and arbitrary
-	// memory locations.
-
-	asm volatile("int %1\n"
-  800c84:	b9 00 00 00 00       	mov    $0x0,%ecx
-  800c89:	b8 0c 00 00 00       	mov    $0xc,%eax
-  800c8e:	8b 55 08             	mov    0x8(%ebp),%edx
-  800c91:	89 cb                	mov    %ecx,%ebx
-  800c93:	89 cf                	mov    %ecx,%edi
-  800c95:	89 ce                	mov    %ecx,%esi
-  800c97:	cd 30                	int    $0x30
+  800c61:	bb 00 00 00 00       	mov    $0x0,%ebx
+  800c66:	b8 0a 00 00 00       	mov    $0xa,%eax
+  800c6b:	8b 4d 0c             	mov    0xc(%ebp),%ecx
+  800c6e:	8b 55 08             	mov    0x8(%ebp),%edx
+  800c71:	89 df                	mov    %ebx,%edi
+  800c73:	89 de                	mov    %ebx,%esi
+  800c75:	cd 30                	int    $0x30
 		  "b" (a3),
 		  "D" (a4),
 		  "S" (a5)
 		: "cc", "memory");
 
 	if(check && ret > 0)
-  800c99:	85 c0                	test   %eax,%eax
-  800c9b:	7e 17                	jle    800cb4 <sys_ipc_recv+0x39>
+  800c77:	85 c0                	test   %eax,%eax
+  800c79:	7e 17                	jle    800c92 <sys_env_set_pgfault_upcall+0x3a>
 		panic("syscall %d returned %d (> 0)", num, ret);
-  800c9d:	83 ec 0c             	sub    $0xc,%esp
-  800ca0:	50                   	push   %eax
-  800ca1:	6a 0c                	push   $0xc
-  800ca3:	68 68 12 80 00       	push   $0x801268
-  800ca8:	6a 23                	push   $0x23
-  800caa:	68 85 12 80 00       	push   $0x801285
-  800caf:	e8 08 00 00 00       	call   800cbc <_panic>
+  800c7b:	83 ec 0c             	sub    $0xc,%esp
+  800c7e:	50                   	push   %eax
+  800c7f:	6a 0a                	push   $0xa
+  800c81:	68 5f 13 80 00       	push   $0x80135f
+  800c86:	6a 23                	push   $0x23
+  800c88:	68 7c 13 80 00       	push   $0x80137c
+  800c8d:	e8 6c 00 00 00       	call   800cfe <_panic>
+
+int
+sys_env_set_pgfault_upcall(envid_t envid, void *upcall)
+{
+	return syscall(SYS_env_set_pgfault_upcall, 1, envid, (uint32_t) upcall, 0, 0, 0);
+}
+  800c92:	8d 65 f4             	lea    -0xc(%ebp),%esp
+  800c95:	5b                   	pop    %ebx
+  800c96:	5e                   	pop    %esi
+  800c97:	5f                   	pop    %edi
+  800c98:	5d                   	pop    %ebp
+  800c99:	c3                   	ret    
+
+00800c9a <sys_ipc_try_send>:
+
+int
+sys_ipc_try_send(envid_t envid, uint32_t value, void *srcva, int perm)
+{
+  800c9a:	55                   	push   %ebp
+  800c9b:	89 e5                	mov    %esp,%ebp
+  800c9d:	57                   	push   %edi
+  800c9e:	56                   	push   %esi
+  800c9f:	53                   	push   %ebx
+	//
+	// The last clause tells the assembler that this can
+	// potentially change the condition codes and arbitrary
+	// memory locations.
+
+	asm volatile("int %1\n"
+  800ca0:	be 00 00 00 00       	mov    $0x0,%esi
+  800ca5:	b8 0c 00 00 00       	mov    $0xc,%eax
+  800caa:	8b 4d 0c             	mov    0xc(%ebp),%ecx
+  800cad:	8b 55 08             	mov    0x8(%ebp),%edx
+  800cb0:	8b 5d 10             	mov    0x10(%ebp),%ebx
+  800cb3:	8b 7d 14             	mov    0x14(%ebp),%edi
+  800cb6:	cd 30                	int    $0x30
+
+int
+sys_ipc_try_send(envid_t envid, uint32_t value, void *srcva, int perm)
+{
+	return syscall(SYS_ipc_try_send, 0, envid, value, (uint32_t) srcva, perm, 0);
+}
+  800cb8:	5b                   	pop    %ebx
+  800cb9:	5e                   	pop    %esi
+  800cba:	5f                   	pop    %edi
+  800cbb:	5d                   	pop    %ebp
+  800cbc:	c3                   	ret    
+
+00800cbd <sys_ipc_recv>:
+
+int
+sys_ipc_recv(void *dstva)
+{
+  800cbd:	55                   	push   %ebp
+  800cbe:	89 e5                	mov    %esp,%ebp
+  800cc0:	57                   	push   %edi
+  800cc1:	56                   	push   %esi
+  800cc2:	53                   	push   %ebx
+  800cc3:	83 ec 0c             	sub    $0xc,%esp
+	//
+	// The last clause tells the assembler that this can
+	// potentially change the condition codes and arbitrary
+	// memory locations.
+
+	asm volatile("int %1\n"
+  800cc6:	b9 00 00 00 00       	mov    $0x0,%ecx
+  800ccb:	b8 0d 00 00 00       	mov    $0xd,%eax
+  800cd0:	8b 55 08             	mov    0x8(%ebp),%edx
+  800cd3:	89 cb                	mov    %ecx,%ebx
+  800cd5:	89 cf                	mov    %ecx,%edi
+  800cd7:	89 ce                	mov    %ecx,%esi
+  800cd9:	cd 30                	int    $0x30
+		  "b" (a3),
+		  "D" (a4),
+		  "S" (a5)
+		: "cc", "memory");
+
+	if(check && ret > 0)
+  800cdb:	85 c0                	test   %eax,%eax
+  800cdd:	7e 17                	jle    800cf6 <sys_ipc_recv+0x39>
+		panic("syscall %d returned %d (> 0)", num, ret);
+  800cdf:	83 ec 0c             	sub    $0xc,%esp
+  800ce2:	50                   	push   %eax
+  800ce3:	6a 0d                	push   $0xd
+  800ce5:	68 5f 13 80 00       	push   $0x80135f
+  800cea:	6a 23                	push   $0x23
+  800cec:	68 7c 13 80 00       	push   $0x80137c
+  800cf1:	e8 08 00 00 00       	call   800cfe <_panic>
 
 int
 sys_ipc_recv(void *dstva)
 {
 	return syscall(SYS_ipc_recv, 1, (uint32_t)dstva, 0, 0, 0, 0);
 }
-  800cb4:	8d 65 f4             	lea    -0xc(%ebp),%esp
-  800cb7:	5b                   	pop    %ebx
-  800cb8:	5e                   	pop    %esi
-  800cb9:	5f                   	pop    %edi
-  800cba:	5d                   	pop    %ebp
-  800cbb:	c3                   	ret    
+  800cf6:	8d 65 f4             	lea    -0xc(%ebp),%esp
+  800cf9:	5b                   	pop    %ebx
+  800cfa:	5e                   	pop    %esi
+  800cfb:	5f                   	pop    %edi
+  800cfc:	5d                   	pop    %ebp
+  800cfd:	c3                   	ret    
 
-00800cbc <_panic>:
+00800cfe <_panic>:
  * It prints "panic: <message>", then causes a breakpoint exception,
  * which causes JOS to enter the JOS kernel monitor.
  */
 void
 _panic(const char *file, int line, const char *fmt, ...)
 {
-  800cbc:	55                   	push   %ebp
-  800cbd:	89 e5                	mov    %esp,%ebp
-  800cbf:	56                   	push   %esi
-  800cc0:	53                   	push   %ebx
+  800cfe:	55                   	push   %ebp
+  800cff:	89 e5                	mov    %esp,%ebp
+  800d01:	56                   	push   %esi
+  800d02:	53                   	push   %ebx
 	va_list ap;
 
 	va_start(ap, fmt);
-  800cc1:	8d 5d 14             	lea    0x14(%ebp),%ebx
+  800d03:	8d 5d 14             	lea    0x14(%ebp),%ebx
 
 	// Print the panic message
 	cprintf("[%08x] user panic in %s at %s:%d: ",
-  800cc4:	8b 35 00 20 80 00    	mov    0x802000,%esi
-  800cca:	e8 00 fe ff ff       	call   800acf <sys_getenvid>
-  800ccf:	83 ec 0c             	sub    $0xc,%esp
-  800cd2:	ff 75 0c             	pushl  0xc(%ebp)
-  800cd5:	ff 75 08             	pushl  0x8(%ebp)
-  800cd8:	56                   	push   %esi
-  800cd9:	50                   	push   %eax
-  800cda:	68 94 12 80 00       	push   $0x801294
-  800cdf:	e8 a1 f4 ff ff       	call   800185 <cprintf>
+  800d06:	8b 35 00 20 80 00    	mov    0x802000,%esi
+  800d0c:	e8 be fd ff ff       	call   800acf <sys_getenvid>
+  800d11:	83 ec 0c             	sub    $0xc,%esp
+  800d14:	ff 75 0c             	pushl  0xc(%ebp)
+  800d17:	ff 75 08             	pushl  0x8(%ebp)
+  800d1a:	56                   	push   %esi
+  800d1b:	50                   	push   %eax
+  800d1c:	68 8c 13 80 00       	push   $0x80138c
+  800d21:	e8 5f f4 ff ff       	call   800185 <cprintf>
 		sys_getenvid(), binaryname, file, line);
 	vcprintf(fmt, ap);
-  800ce4:	83 c4 18             	add    $0x18,%esp
-  800ce7:	53                   	push   %ebx
-  800ce8:	ff 75 10             	pushl  0x10(%ebp)
-  800ceb:	e8 44 f4 ff ff       	call   800134 <vcprintf>
+  800d26:	83 c4 18             	add    $0x18,%esp
+  800d29:	53                   	push   %ebx
+  800d2a:	ff 75 10             	pushl  0x10(%ebp)
+  800d2d:	e8 02 f4 ff ff       	call   800134 <vcprintf>
 	cprintf("\n");
-  800cf0:	c7 04 24 b8 12 80 00 	movl   $0x8012b8,(%esp)
-  800cf7:	e8 89 f4 ff ff       	call   800185 <cprintf>
-  800cfc:	83 c4 10             	add    $0x10,%esp
+  800d32:	c7 04 24 b0 13 80 00 	movl   $0x8013b0,(%esp)
+  800d39:	e8 47 f4 ff ff       	call   800185 <cprintf>
+  800d3e:	83 c4 10             	add    $0x10,%esp
 
 	// Cause a breakpoint exception
 	while (1)
 		asm volatile("int3");
-  800cff:	cc                   	int3   
-  800d00:	eb fd                	jmp    800cff <_panic+0x43>
-  800d02:	66 90                	xchg   %ax,%ax
-  800d04:	66 90                	xchg   %ax,%ax
-  800d06:	66 90                	xchg   %ax,%ax
-  800d08:	66 90                	xchg   %ax,%ax
-  800d0a:	66 90                	xchg   %ax,%ax
-  800d0c:	66 90                	xchg   %ax,%ax
-  800d0e:	66 90                	xchg   %ax,%ax
+  800d41:	cc                   	int3   
+  800d42:	eb fd                	jmp    800d41 <_panic+0x43>
+  800d44:	66 90                	xchg   %ax,%ax
+  800d46:	66 90                	xchg   %ax,%ax
+  800d48:	66 90                	xchg   %ax,%ax
+  800d4a:	66 90                	xchg   %ax,%ax
+  800d4c:	66 90                	xchg   %ax,%ax
+  800d4e:	66 90                	xchg   %ax,%ax
 
-00800d10 <__udivdi3>:
-  800d10:	55                   	push   %ebp
-  800d11:	57                   	push   %edi
-  800d12:	56                   	push   %esi
-  800d13:	53                   	push   %ebx
-  800d14:	83 ec 1c             	sub    $0x1c,%esp
-  800d17:	8b 74 24 3c          	mov    0x3c(%esp),%esi
-  800d1b:	8b 5c 24 30          	mov    0x30(%esp),%ebx
-  800d1f:	8b 4c 24 34          	mov    0x34(%esp),%ecx
-  800d23:	8b 7c 24 38          	mov    0x38(%esp),%edi
-  800d27:	85 f6                	test   %esi,%esi
-  800d29:	89 5c 24 08          	mov    %ebx,0x8(%esp)
-  800d2d:	89 ca                	mov    %ecx,%edx
-  800d2f:	89 f8                	mov    %edi,%eax
-  800d31:	75 3d                	jne    800d70 <__udivdi3+0x60>
-  800d33:	39 cf                	cmp    %ecx,%edi
-  800d35:	0f 87 c5 00 00 00    	ja     800e00 <__udivdi3+0xf0>
-  800d3b:	85 ff                	test   %edi,%edi
-  800d3d:	89 fd                	mov    %edi,%ebp
-  800d3f:	75 0b                	jne    800d4c <__udivdi3+0x3c>
-  800d41:	b8 01 00 00 00       	mov    $0x1,%eax
-  800d46:	31 d2                	xor    %edx,%edx
-  800d48:	f7 f7                	div    %edi
-  800d4a:	89 c5                	mov    %eax,%ebp
-  800d4c:	89 c8                	mov    %ecx,%eax
-  800d4e:	31 d2                	xor    %edx,%edx
-  800d50:	f7 f5                	div    %ebp
-  800d52:	89 c1                	mov    %eax,%ecx
-  800d54:	89 d8                	mov    %ebx,%eax
-  800d56:	89 cf                	mov    %ecx,%edi
-  800d58:	f7 f5                	div    %ebp
-  800d5a:	89 c3                	mov    %eax,%ebx
-  800d5c:	89 d8                	mov    %ebx,%eax
-  800d5e:	89 fa                	mov    %edi,%edx
-  800d60:	83 c4 1c             	add    $0x1c,%esp
-  800d63:	5b                   	pop    %ebx
-  800d64:	5e                   	pop    %esi
-  800d65:	5f                   	pop    %edi
-  800d66:	5d                   	pop    %ebp
-  800d67:	c3                   	ret    
-  800d68:	90                   	nop
-  800d69:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi
-  800d70:	39 ce                	cmp    %ecx,%esi
-  800d72:	77 74                	ja     800de8 <__udivdi3+0xd8>
-  800d74:	0f bd fe             	bsr    %esi,%edi
-  800d77:	83 f7 1f             	xor    $0x1f,%edi
-  800d7a:	0f 84 98 00 00 00    	je     800e18 <__udivdi3+0x108>
-  800d80:	bb 20 00 00 00       	mov    $0x20,%ebx
-  800d85:	89 f9                	mov    %edi,%ecx
-  800d87:	89 c5                	mov    %eax,%ebp
-  800d89:	29 fb                	sub    %edi,%ebx
-  800d8b:	d3 e6                	shl    %cl,%esi
-  800d8d:	89 d9                	mov    %ebx,%ecx
-  800d8f:	d3 ed                	shr    %cl,%ebp
-  800d91:	89 f9                	mov    %edi,%ecx
-  800d93:	d3 e0                	shl    %cl,%eax
-  800d95:	09 ee                	or     %ebp,%esi
-  800d97:	89 d9                	mov    %ebx,%ecx
-  800d99:	89 44 24 0c          	mov    %eax,0xc(%esp)
-  800d9d:	89 d5                	mov    %edx,%ebp
-  800d9f:	8b 44 24 08          	mov    0x8(%esp),%eax
-  800da3:	d3 ed                	shr    %cl,%ebp
-  800da5:	89 f9                	mov    %edi,%ecx
-  800da7:	d3 e2                	shl    %cl,%edx
-  800da9:	89 d9                	mov    %ebx,%ecx
-  800dab:	d3 e8                	shr    %cl,%eax
-  800dad:	09 c2                	or     %eax,%edx
-  800daf:	89 d0                	mov    %edx,%eax
-  800db1:	89 ea                	mov    %ebp,%edx
-  800db3:	f7 f6                	div    %esi
-  800db5:	89 d5                	mov    %edx,%ebp
-  800db7:	89 c3                	mov    %eax,%ebx
-  800db9:	f7 64 24 0c          	mull   0xc(%esp)
-  800dbd:	39 d5                	cmp    %edx,%ebp
-  800dbf:	72 10                	jb     800dd1 <__udivdi3+0xc1>
-  800dc1:	8b 74 24 08          	mov    0x8(%esp),%esi
+00800d50 <__udivdi3>:
+  800d50:	55                   	push   %ebp
+  800d51:	57                   	push   %edi
+  800d52:	56                   	push   %esi
+  800d53:	53                   	push   %ebx
+  800d54:	83 ec 1c             	sub    $0x1c,%esp
+  800d57:	8b 74 24 3c          	mov    0x3c(%esp),%esi
+  800d5b:	8b 5c 24 30          	mov    0x30(%esp),%ebx
+  800d5f:	8b 4c 24 34          	mov    0x34(%esp),%ecx
+  800d63:	8b 7c 24 38          	mov    0x38(%esp),%edi
+  800d67:	85 f6                	test   %esi,%esi
+  800d69:	89 5c 24 08          	mov    %ebx,0x8(%esp)
+  800d6d:	89 ca                	mov    %ecx,%edx
+  800d6f:	89 f8                	mov    %edi,%eax
+  800d71:	75 3d                	jne    800db0 <__udivdi3+0x60>
+  800d73:	39 cf                	cmp    %ecx,%edi
+  800d75:	0f 87 c5 00 00 00    	ja     800e40 <__udivdi3+0xf0>
+  800d7b:	85 ff                	test   %edi,%edi
+  800d7d:	89 fd                	mov    %edi,%ebp
+  800d7f:	75 0b                	jne    800d8c <__udivdi3+0x3c>
+  800d81:	b8 01 00 00 00       	mov    $0x1,%eax
+  800d86:	31 d2                	xor    %edx,%edx
+  800d88:	f7 f7                	div    %edi
+  800d8a:	89 c5                	mov    %eax,%ebp
+  800d8c:	89 c8                	mov    %ecx,%eax
+  800d8e:	31 d2                	xor    %edx,%edx
+  800d90:	f7 f5                	div    %ebp
+  800d92:	89 c1                	mov    %eax,%ecx
+  800d94:	89 d8                	mov    %ebx,%eax
+  800d96:	89 cf                	mov    %ecx,%edi
+  800d98:	f7 f5                	div    %ebp
+  800d9a:	89 c3                	mov    %eax,%ebx
+  800d9c:	89 d8                	mov    %ebx,%eax
+  800d9e:	89 fa                	mov    %edi,%edx
+  800da0:	83 c4 1c             	add    $0x1c,%esp
+  800da3:	5b                   	pop    %ebx
+  800da4:	5e                   	pop    %esi
+  800da5:	5f                   	pop    %edi
+  800da6:	5d                   	pop    %ebp
+  800da7:	c3                   	ret    
+  800da8:	90                   	nop
+  800da9:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi
+  800db0:	39 ce                	cmp    %ecx,%esi
+  800db2:	77 74                	ja     800e28 <__udivdi3+0xd8>
+  800db4:	0f bd fe             	bsr    %esi,%edi
+  800db7:	83 f7 1f             	xor    $0x1f,%edi
+  800dba:	0f 84 98 00 00 00    	je     800e58 <__udivdi3+0x108>
+  800dc0:	bb 20 00 00 00       	mov    $0x20,%ebx
   800dc5:	89 f9                	mov    %edi,%ecx
-  800dc7:	d3 e6                	shl    %cl,%esi
-  800dc9:	39 c6                	cmp    %eax,%esi
-  800dcb:	73 07                	jae    800dd4 <__udivdi3+0xc4>
-  800dcd:	39 d5                	cmp    %edx,%ebp
-  800dcf:	75 03                	jne    800dd4 <__udivdi3+0xc4>
-  800dd1:	83 eb 01             	sub    $0x1,%ebx
-  800dd4:	31 ff                	xor    %edi,%edi
-  800dd6:	89 d8                	mov    %ebx,%eax
-  800dd8:	89 fa                	mov    %edi,%edx
-  800dda:	83 c4 1c             	add    $0x1c,%esp
-  800ddd:	5b                   	pop    %ebx
-  800dde:	5e                   	pop    %esi
-  800ddf:	5f                   	pop    %edi
-  800de0:	5d                   	pop    %ebp
-  800de1:	c3                   	ret    
-  800de2:	8d b6 00 00 00 00    	lea    0x0(%esi),%esi
-  800de8:	31 ff                	xor    %edi,%edi
-  800dea:	31 db                	xor    %ebx,%ebx
-  800dec:	89 d8                	mov    %ebx,%eax
-  800dee:	89 fa                	mov    %edi,%edx
-  800df0:	83 c4 1c             	add    $0x1c,%esp
-  800df3:	5b                   	pop    %ebx
-  800df4:	5e                   	pop    %esi
-  800df5:	5f                   	pop    %edi
-  800df6:	5d                   	pop    %ebp
-  800df7:	c3                   	ret    
-  800df8:	90                   	nop
-  800df9:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi
-  800e00:	89 d8                	mov    %ebx,%eax
-  800e02:	f7 f7                	div    %edi
-  800e04:	31 ff                	xor    %edi,%edi
-  800e06:	89 c3                	mov    %eax,%ebx
-  800e08:	89 d8                	mov    %ebx,%eax
-  800e0a:	89 fa                	mov    %edi,%edx
-  800e0c:	83 c4 1c             	add    $0x1c,%esp
-  800e0f:	5b                   	pop    %ebx
-  800e10:	5e                   	pop    %esi
-  800e11:	5f                   	pop    %edi
-  800e12:	5d                   	pop    %ebp
-  800e13:	c3                   	ret    
-  800e14:	8d 74 26 00          	lea    0x0(%esi,%eiz,1),%esi
-  800e18:	39 ce                	cmp    %ecx,%esi
-  800e1a:	72 0c                	jb     800e28 <__udivdi3+0x118>
-  800e1c:	31 db                	xor    %ebx,%ebx
-  800e1e:	3b 44 24 08          	cmp    0x8(%esp),%eax
-  800e22:	0f 87 34 ff ff ff    	ja     800d5c <__udivdi3+0x4c>
-  800e28:	bb 01 00 00 00       	mov    $0x1,%ebx
-  800e2d:	e9 2a ff ff ff       	jmp    800d5c <__udivdi3+0x4c>
-  800e32:	66 90                	xchg   %ax,%ax
-  800e34:	66 90                	xchg   %ax,%ax
-  800e36:	66 90                	xchg   %ax,%ax
-  800e38:	66 90                	xchg   %ax,%ax
-  800e3a:	66 90                	xchg   %ax,%ax
-  800e3c:	66 90                	xchg   %ax,%ax
-  800e3e:	66 90                	xchg   %ax,%ax
+  800dc7:	89 c5                	mov    %eax,%ebp
+  800dc9:	29 fb                	sub    %edi,%ebx
+  800dcb:	d3 e6                	shl    %cl,%esi
+  800dcd:	89 d9                	mov    %ebx,%ecx
+  800dcf:	d3 ed                	shr    %cl,%ebp
+  800dd1:	89 f9                	mov    %edi,%ecx
+  800dd3:	d3 e0                	shl    %cl,%eax
+  800dd5:	09 ee                	or     %ebp,%esi
+  800dd7:	89 d9                	mov    %ebx,%ecx
+  800dd9:	89 44 24 0c          	mov    %eax,0xc(%esp)
+  800ddd:	89 d5                	mov    %edx,%ebp
+  800ddf:	8b 44 24 08          	mov    0x8(%esp),%eax
+  800de3:	d3 ed                	shr    %cl,%ebp
+  800de5:	89 f9                	mov    %edi,%ecx
+  800de7:	d3 e2                	shl    %cl,%edx
+  800de9:	89 d9                	mov    %ebx,%ecx
+  800deb:	d3 e8                	shr    %cl,%eax
+  800ded:	09 c2                	or     %eax,%edx
+  800def:	89 d0                	mov    %edx,%eax
+  800df1:	89 ea                	mov    %ebp,%edx
+  800df3:	f7 f6                	div    %esi
+  800df5:	89 d5                	mov    %edx,%ebp
+  800df7:	89 c3                	mov    %eax,%ebx
+  800df9:	f7 64 24 0c          	mull   0xc(%esp)
+  800dfd:	39 d5                	cmp    %edx,%ebp
+  800dff:	72 10                	jb     800e11 <__udivdi3+0xc1>
+  800e01:	8b 74 24 08          	mov    0x8(%esp),%esi
+  800e05:	89 f9                	mov    %edi,%ecx
+  800e07:	d3 e6                	shl    %cl,%esi
+  800e09:	39 c6                	cmp    %eax,%esi
+  800e0b:	73 07                	jae    800e14 <__udivdi3+0xc4>
+  800e0d:	39 d5                	cmp    %edx,%ebp
+  800e0f:	75 03                	jne    800e14 <__udivdi3+0xc4>
+  800e11:	83 eb 01             	sub    $0x1,%ebx
+  800e14:	31 ff                	xor    %edi,%edi
+  800e16:	89 d8                	mov    %ebx,%eax
+  800e18:	89 fa                	mov    %edi,%edx
+  800e1a:	83 c4 1c             	add    $0x1c,%esp
+  800e1d:	5b                   	pop    %ebx
+  800e1e:	5e                   	pop    %esi
+  800e1f:	5f                   	pop    %edi
+  800e20:	5d                   	pop    %ebp
+  800e21:	c3                   	ret    
+  800e22:	8d b6 00 00 00 00    	lea    0x0(%esi),%esi
+  800e28:	31 ff                	xor    %edi,%edi
+  800e2a:	31 db                	xor    %ebx,%ebx
+  800e2c:	89 d8                	mov    %ebx,%eax
+  800e2e:	89 fa                	mov    %edi,%edx
+  800e30:	83 c4 1c             	add    $0x1c,%esp
+  800e33:	5b                   	pop    %ebx
+  800e34:	5e                   	pop    %esi
+  800e35:	5f                   	pop    %edi
+  800e36:	5d                   	pop    %ebp
+  800e37:	c3                   	ret    
+  800e38:	90                   	nop
+  800e39:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi
+  800e40:	89 d8                	mov    %ebx,%eax
+  800e42:	f7 f7                	div    %edi
+  800e44:	31 ff                	xor    %edi,%edi
+  800e46:	89 c3                	mov    %eax,%ebx
+  800e48:	89 d8                	mov    %ebx,%eax
+  800e4a:	89 fa                	mov    %edi,%edx
+  800e4c:	83 c4 1c             	add    $0x1c,%esp
+  800e4f:	5b                   	pop    %ebx
+  800e50:	5e                   	pop    %esi
+  800e51:	5f                   	pop    %edi
+  800e52:	5d                   	pop    %ebp
+  800e53:	c3                   	ret    
+  800e54:	8d 74 26 00          	lea    0x0(%esi,%eiz,1),%esi
+  800e58:	39 ce                	cmp    %ecx,%esi
+  800e5a:	72 0c                	jb     800e68 <__udivdi3+0x118>
+  800e5c:	31 db                	xor    %ebx,%ebx
+  800e5e:	3b 44 24 08          	cmp    0x8(%esp),%eax
+  800e62:	0f 87 34 ff ff ff    	ja     800d9c <__udivdi3+0x4c>
+  800e68:	bb 01 00 00 00       	mov    $0x1,%ebx
+  800e6d:	e9 2a ff ff ff       	jmp    800d9c <__udivdi3+0x4c>
+  800e72:	66 90                	xchg   %ax,%ax
+  800e74:	66 90                	xchg   %ax,%ax
+  800e76:	66 90                	xchg   %ax,%ax
+  800e78:	66 90                	xchg   %ax,%ax
+  800e7a:	66 90                	xchg   %ax,%ax
+  800e7c:	66 90                	xchg   %ax,%ax
+  800e7e:	66 90                	xchg   %ax,%ax
 
-00800e40 <__umoddi3>:
-  800e40:	55                   	push   %ebp
-  800e41:	57                   	push   %edi
-  800e42:	56                   	push   %esi
-  800e43:	53                   	push   %ebx
-  800e44:	83 ec 1c             	sub    $0x1c,%esp
-  800e47:	8b 54 24 3c          	mov    0x3c(%esp),%edx
-  800e4b:	8b 4c 24 30          	mov    0x30(%esp),%ecx
-  800e4f:	8b 74 24 34          	mov    0x34(%esp),%esi
-  800e53:	8b 7c 24 38          	mov    0x38(%esp),%edi
-  800e57:	85 d2                	test   %edx,%edx
-  800e59:	89 4c 24 0c          	mov    %ecx,0xc(%esp)
-  800e5d:	89 4c 24 08          	mov    %ecx,0x8(%esp)
-  800e61:	89 f3                	mov    %esi,%ebx
-  800e63:	89 3c 24             	mov    %edi,(%esp)
-  800e66:	89 74 24 04          	mov    %esi,0x4(%esp)
-  800e6a:	75 1c                	jne    800e88 <__umoddi3+0x48>
-  800e6c:	39 f7                	cmp    %esi,%edi
-  800e6e:	76 50                	jbe    800ec0 <__umoddi3+0x80>
-  800e70:	89 c8                	mov    %ecx,%eax
-  800e72:	89 f2                	mov    %esi,%edx
-  800e74:	f7 f7                	div    %edi
-  800e76:	89 d0                	mov    %edx,%eax
-  800e78:	31 d2                	xor    %edx,%edx
-  800e7a:	83 c4 1c             	add    $0x1c,%esp
-  800e7d:	5b                   	pop    %ebx
-  800e7e:	5e                   	pop    %esi
-  800e7f:	5f                   	pop    %edi
-  800e80:	5d                   	pop    %ebp
-  800e81:	c3                   	ret    
-  800e82:	8d b6 00 00 00 00    	lea    0x0(%esi),%esi
-  800e88:	39 f2                	cmp    %esi,%edx
-  800e8a:	89 d0                	mov    %edx,%eax
-  800e8c:	77 52                	ja     800ee0 <__umoddi3+0xa0>
-  800e8e:	0f bd ea             	bsr    %edx,%ebp
-  800e91:	83 f5 1f             	xor    $0x1f,%ebp
-  800e94:	75 5a                	jne    800ef0 <__umoddi3+0xb0>
-  800e96:	3b 54 24 04          	cmp    0x4(%esp),%edx
-  800e9a:	0f 82 e0 00 00 00    	jb     800f80 <__umoddi3+0x140>
-  800ea0:	39 0c 24             	cmp    %ecx,(%esp)
-  800ea3:	0f 86 d7 00 00 00    	jbe    800f80 <__umoddi3+0x140>
-  800ea9:	8b 44 24 08          	mov    0x8(%esp),%eax
-  800ead:	8b 54 24 04          	mov    0x4(%esp),%edx
-  800eb1:	83 c4 1c             	add    $0x1c,%esp
-  800eb4:	5b                   	pop    %ebx
-  800eb5:	5e                   	pop    %esi
-  800eb6:	5f                   	pop    %edi
-  800eb7:	5d                   	pop    %ebp
-  800eb8:	c3                   	ret    
-  800eb9:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi
-  800ec0:	85 ff                	test   %edi,%edi
-  800ec2:	89 fd                	mov    %edi,%ebp
-  800ec4:	75 0b                	jne    800ed1 <__umoddi3+0x91>
-  800ec6:	b8 01 00 00 00       	mov    $0x1,%eax
-  800ecb:	31 d2                	xor    %edx,%edx
-  800ecd:	f7 f7                	div    %edi
-  800ecf:	89 c5                	mov    %eax,%ebp
-  800ed1:	89 f0                	mov    %esi,%eax
-  800ed3:	31 d2                	xor    %edx,%edx
-  800ed5:	f7 f5                	div    %ebp
-  800ed7:	89 c8                	mov    %ecx,%eax
-  800ed9:	f7 f5                	div    %ebp
-  800edb:	89 d0                	mov    %edx,%eax
-  800edd:	eb 99                	jmp    800e78 <__umoddi3+0x38>
-  800edf:	90                   	nop
-  800ee0:	89 c8                	mov    %ecx,%eax
-  800ee2:	89 f2                	mov    %esi,%edx
-  800ee4:	83 c4 1c             	add    $0x1c,%esp
-  800ee7:	5b                   	pop    %ebx
-  800ee8:	5e                   	pop    %esi
-  800ee9:	5f                   	pop    %edi
-  800eea:	5d                   	pop    %ebp
-  800eeb:	c3                   	ret    
-  800eec:	8d 74 26 00          	lea    0x0(%esi,%eiz,1),%esi
-  800ef0:	8b 34 24             	mov    (%esp),%esi
-  800ef3:	bf 20 00 00 00       	mov    $0x20,%edi
-  800ef8:	89 e9                	mov    %ebp,%ecx
-  800efa:	29 ef                	sub    %ebp,%edi
-  800efc:	d3 e0                	shl    %cl,%eax
-  800efe:	89 f9                	mov    %edi,%ecx
-  800f00:	89 f2                	mov    %esi,%edx
-  800f02:	d3 ea                	shr    %cl,%edx
-  800f04:	89 e9                	mov    %ebp,%ecx
-  800f06:	09 c2                	or     %eax,%edx
-  800f08:	89 d8                	mov    %ebx,%eax
-  800f0a:	89 14 24             	mov    %edx,(%esp)
-  800f0d:	89 f2                	mov    %esi,%edx
-  800f0f:	d3 e2                	shl    %cl,%edx
-  800f11:	89 f9                	mov    %edi,%ecx
-  800f13:	89 54 24 04          	mov    %edx,0x4(%esp)
-  800f17:	8b 54 24 0c          	mov    0xc(%esp),%edx
-  800f1b:	d3 e8                	shr    %cl,%eax
-  800f1d:	89 e9                	mov    %ebp,%ecx
-  800f1f:	89 c6                	mov    %eax,%esi
-  800f21:	d3 e3                	shl    %cl,%ebx
-  800f23:	89 f9                	mov    %edi,%ecx
-  800f25:	89 d0                	mov    %edx,%eax
-  800f27:	d3 e8                	shr    %cl,%eax
-  800f29:	89 e9                	mov    %ebp,%ecx
-  800f2b:	09 d8                	or     %ebx,%eax
-  800f2d:	89 d3                	mov    %edx,%ebx
-  800f2f:	89 f2                	mov    %esi,%edx
-  800f31:	f7 34 24             	divl   (%esp)
-  800f34:	89 d6                	mov    %edx,%esi
-  800f36:	d3 e3                	shl    %cl,%ebx
-  800f38:	f7 64 24 04          	mull   0x4(%esp)
-  800f3c:	39 d6                	cmp    %edx,%esi
-  800f3e:	89 5c 24 08          	mov    %ebx,0x8(%esp)
-  800f42:	89 d1                	mov    %edx,%ecx
-  800f44:	89 c3                	mov    %eax,%ebx
-  800f46:	72 08                	jb     800f50 <__umoddi3+0x110>
-  800f48:	75 11                	jne    800f5b <__umoddi3+0x11b>
-  800f4a:	39 44 24 08          	cmp    %eax,0x8(%esp)
-  800f4e:	73 0b                	jae    800f5b <__umoddi3+0x11b>
-  800f50:	2b 44 24 04          	sub    0x4(%esp),%eax
-  800f54:	1b 14 24             	sbb    (%esp),%edx
-  800f57:	89 d1                	mov    %edx,%ecx
-  800f59:	89 c3                	mov    %eax,%ebx
-  800f5b:	8b 54 24 08          	mov    0x8(%esp),%edx
-  800f5f:	29 da                	sub    %ebx,%edx
-  800f61:	19 ce                	sbb    %ecx,%esi
+00800e80 <__umoddi3>:
+  800e80:	55                   	push   %ebp
+  800e81:	57                   	push   %edi
+  800e82:	56                   	push   %esi
+  800e83:	53                   	push   %ebx
+  800e84:	83 ec 1c             	sub    $0x1c,%esp
+  800e87:	8b 54 24 3c          	mov    0x3c(%esp),%edx
+  800e8b:	8b 4c 24 30          	mov    0x30(%esp),%ecx
+  800e8f:	8b 74 24 34          	mov    0x34(%esp),%esi
+  800e93:	8b 7c 24 38          	mov    0x38(%esp),%edi
+  800e97:	85 d2                	test   %edx,%edx
+  800e99:	89 4c 24 0c          	mov    %ecx,0xc(%esp)
+  800e9d:	89 4c 24 08          	mov    %ecx,0x8(%esp)
+  800ea1:	89 f3                	mov    %esi,%ebx
+  800ea3:	89 3c 24             	mov    %edi,(%esp)
+  800ea6:	89 74 24 04          	mov    %esi,0x4(%esp)
+  800eaa:	75 1c                	jne    800ec8 <__umoddi3+0x48>
+  800eac:	39 f7                	cmp    %esi,%edi
+  800eae:	76 50                	jbe    800f00 <__umoddi3+0x80>
+  800eb0:	89 c8                	mov    %ecx,%eax
+  800eb2:	89 f2                	mov    %esi,%edx
+  800eb4:	f7 f7                	div    %edi
+  800eb6:	89 d0                	mov    %edx,%eax
+  800eb8:	31 d2                	xor    %edx,%edx
+  800eba:	83 c4 1c             	add    $0x1c,%esp
+  800ebd:	5b                   	pop    %ebx
+  800ebe:	5e                   	pop    %esi
+  800ebf:	5f                   	pop    %edi
+  800ec0:	5d                   	pop    %ebp
+  800ec1:	c3                   	ret    
+  800ec2:	8d b6 00 00 00 00    	lea    0x0(%esi),%esi
+  800ec8:	39 f2                	cmp    %esi,%edx
+  800eca:	89 d0                	mov    %edx,%eax
+  800ecc:	77 52                	ja     800f20 <__umoddi3+0xa0>
+  800ece:	0f bd ea             	bsr    %edx,%ebp
+  800ed1:	83 f5 1f             	xor    $0x1f,%ebp
+  800ed4:	75 5a                	jne    800f30 <__umoddi3+0xb0>
+  800ed6:	3b 54 24 04          	cmp    0x4(%esp),%edx
+  800eda:	0f 82 e0 00 00 00    	jb     800fc0 <__umoddi3+0x140>
+  800ee0:	39 0c 24             	cmp    %ecx,(%esp)
+  800ee3:	0f 86 d7 00 00 00    	jbe    800fc0 <__umoddi3+0x140>
+  800ee9:	8b 44 24 08          	mov    0x8(%esp),%eax
+  800eed:	8b 54 24 04          	mov    0x4(%esp),%edx
+  800ef1:	83 c4 1c             	add    $0x1c,%esp
+  800ef4:	5b                   	pop    %ebx
+  800ef5:	5e                   	pop    %esi
+  800ef6:	5f                   	pop    %edi
+  800ef7:	5d                   	pop    %ebp
+  800ef8:	c3                   	ret    
+  800ef9:	8d b4 26 00 00 00 00 	lea    0x0(%esi,%eiz,1),%esi
+  800f00:	85 ff                	test   %edi,%edi
+  800f02:	89 fd                	mov    %edi,%ebp
+  800f04:	75 0b                	jne    800f11 <__umoddi3+0x91>
+  800f06:	b8 01 00 00 00       	mov    $0x1,%eax
+  800f0b:	31 d2                	xor    %edx,%edx
+  800f0d:	f7 f7                	div    %edi
+  800f0f:	89 c5                	mov    %eax,%ebp
+  800f11:	89 f0                	mov    %esi,%eax
+  800f13:	31 d2                	xor    %edx,%edx
+  800f15:	f7 f5                	div    %ebp
+  800f17:	89 c8                	mov    %ecx,%eax
+  800f19:	f7 f5                	div    %ebp
+  800f1b:	89 d0                	mov    %edx,%eax
+  800f1d:	eb 99                	jmp    800eb8 <__umoddi3+0x38>
+  800f1f:	90                   	nop
+  800f20:	89 c8                	mov    %ecx,%eax
+  800f22:	89 f2                	mov    %esi,%edx
+  800f24:	83 c4 1c             	add    $0x1c,%esp
+  800f27:	5b                   	pop    %ebx
+  800f28:	5e                   	pop    %esi
+  800f29:	5f                   	pop    %edi
+  800f2a:	5d                   	pop    %ebp
+  800f2b:	c3                   	ret    
+  800f2c:	8d 74 26 00          	lea    0x0(%esi,%eiz,1),%esi
+  800f30:	8b 34 24             	mov    (%esp),%esi
+  800f33:	bf 20 00 00 00       	mov    $0x20,%edi
+  800f38:	89 e9                	mov    %ebp,%ecx
+  800f3a:	29 ef                	sub    %ebp,%edi
+  800f3c:	d3 e0                	shl    %cl,%eax
+  800f3e:	89 f9                	mov    %edi,%ecx
+  800f40:	89 f2                	mov    %esi,%edx
+  800f42:	d3 ea                	shr    %cl,%edx
+  800f44:	89 e9                	mov    %ebp,%ecx
+  800f46:	09 c2                	or     %eax,%edx
+  800f48:	89 d8                	mov    %ebx,%eax
+  800f4a:	89 14 24             	mov    %edx,(%esp)
+  800f4d:	89 f2                	mov    %esi,%edx
+  800f4f:	d3 e2                	shl    %cl,%edx
+  800f51:	89 f9                	mov    %edi,%ecx
+  800f53:	89 54 24 04          	mov    %edx,0x4(%esp)
+  800f57:	8b 54 24 0c          	mov    0xc(%esp),%edx
+  800f5b:	d3 e8                	shr    %cl,%eax
+  800f5d:	89 e9                	mov    %ebp,%ecx
+  800f5f:	89 c6                	mov    %eax,%esi
+  800f61:	d3 e3                	shl    %cl,%ebx
   800f63:	89 f9                	mov    %edi,%ecx
-  800f65:	89 f0                	mov    %esi,%eax
-  800f67:	d3 e0                	shl    %cl,%eax
+  800f65:	89 d0                	mov    %edx,%eax
+  800f67:	d3 e8                	shr    %cl,%eax
   800f69:	89 e9                	mov    %ebp,%ecx
-  800f6b:	d3 ea                	shr    %cl,%edx
-  800f6d:	89 e9                	mov    %ebp,%ecx
-  800f6f:	d3 ee                	shr    %cl,%esi
-  800f71:	09 d0                	or     %edx,%eax
-  800f73:	89 f2                	mov    %esi,%edx
-  800f75:	83 c4 1c             	add    $0x1c,%esp
-  800f78:	5b                   	pop    %ebx
-  800f79:	5e                   	pop    %esi
-  800f7a:	5f                   	pop    %edi
-  800f7b:	5d                   	pop    %ebp
-  800f7c:	c3                   	ret    
-  800f7d:	8d 76 00             	lea    0x0(%esi),%esi
-  800f80:	29 f9                	sub    %edi,%ecx
-  800f82:	19 d6                	sbb    %edx,%esi
-  800f84:	89 74 24 04          	mov    %esi,0x4(%esp)
-  800f88:	89 4c 24 08          	mov    %ecx,0x8(%esp)
-  800f8c:	e9 18 ff ff ff       	jmp    800ea9 <__umoddi3+0x69>
+  800f6b:	09 d8                	or     %ebx,%eax
+  800f6d:	89 d3                	mov    %edx,%ebx
+  800f6f:	89 f2                	mov    %esi,%edx
+  800f71:	f7 34 24             	divl   (%esp)
+  800f74:	89 d6                	mov    %edx,%esi
+  800f76:	d3 e3                	shl    %cl,%ebx
+  800f78:	f7 64 24 04          	mull   0x4(%esp)
+  800f7c:	39 d6                	cmp    %edx,%esi
+  800f7e:	89 5c 24 08          	mov    %ebx,0x8(%esp)
+  800f82:	89 d1                	mov    %edx,%ecx
+  800f84:	89 c3                	mov    %eax,%ebx
+  800f86:	72 08                	jb     800f90 <__umoddi3+0x110>
+  800f88:	75 11                	jne    800f9b <__umoddi3+0x11b>
+  800f8a:	39 44 24 08          	cmp    %eax,0x8(%esp)
+  800f8e:	73 0b                	jae    800f9b <__umoddi3+0x11b>
+  800f90:	2b 44 24 04          	sub    0x4(%esp),%eax
+  800f94:	1b 14 24             	sbb    (%esp),%edx
+  800f97:	89 d1                	mov    %edx,%ecx
+  800f99:	89 c3                	mov    %eax,%ebx
+  800f9b:	8b 54 24 08          	mov    0x8(%esp),%edx
+  800f9f:	29 da                	sub    %ebx,%edx
+  800fa1:	19 ce                	sbb    %ecx,%esi
+  800fa3:	89 f9                	mov    %edi,%ecx
+  800fa5:	89 f0                	mov    %esi,%eax
+  800fa7:	d3 e0                	shl    %cl,%eax
+  800fa9:	89 e9                	mov    %ebp,%ecx
+  800fab:	d3 ea                	shr    %cl,%edx
+  800fad:	89 e9                	mov    %ebp,%ecx
+  800faf:	d3 ee                	shr    %cl,%esi
+  800fb1:	09 d0                	or     %edx,%eax
+  800fb3:	89 f2                	mov    %esi,%edx
+  800fb5:	83 c4 1c             	add    $0x1c,%esp
+  800fb8:	5b                   	pop    %ebx
+  800fb9:	5e                   	pop    %esi
+  800fba:	5f                   	pop    %edi
+  800fbb:	5d                   	pop    %ebp
+  800fbc:	c3                   	ret    
+  800fbd:	8d 76 00             	lea    0x0(%esi),%esi
+  800fc0:	29 f9                	sub    %edi,%ecx
+  800fc2:	19 d6                	sbb    %edx,%esi
+  800fc4:	89 74 24 04          	mov    %esi,0x4(%esp)
+  800fc8:	89 4c 24 08          	mov    %ecx,0x8(%esp)
+  800fcc:	e9 18 ff ff ff       	jmp    800ee9 <__umoddi3+0x69>
