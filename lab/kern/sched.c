@@ -63,7 +63,6 @@ sched_yield(void)
 	/*int i;
 	int current_env_idx = curenv ? ENVX(curenv->env_id) : 0;
 	int idx = (current_env_idx + 1) % NENV; // start by looking at the next process
-
 		for (i = 0; i < NENV; i++) {
 			if (envs[idx].env_status == ENV_RUNNABLE )
 				env_run(&envs[idx]);
@@ -123,4 +122,3 @@ sched_halt(void)
 		"jmp 1b\n"
 	: : "a" (thiscpu->cpu_ts.ts_esp0));
 }
-
