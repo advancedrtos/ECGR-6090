@@ -58,7 +58,6 @@ pgfault(struct UTrapframe *utf)
 	/*p = page_lookup(uvpd, PFTEMP, &pte);
 	if((r = page_insert(uvpd, p, addr, PTE_P|PTE_U|PTE_W)) < 0)
 		panic("\nPage fault error: page_insert failed\n");
-
 	if((r = sys_page_unmap(curenv->envid, PFTEMP)) < 0)
 		panic("\nPage fault error: Sys_page_unmap failed\n");
 	*/

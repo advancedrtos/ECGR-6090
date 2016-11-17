@@ -29,22 +29,19 @@ set_pgfault_handler(void (*handler)(struct UTrapframe *utf))
 	if (_pgfault_handler == 0) {
 		// First time through!
 		// LAB 4: Your code here.
-//		panic("set_pgfault_handler not implemented");
-		r  = sys_page_alloc(thisenv->env_id, (void *) UXSTACKTOP - PGSIZE, PTE_U|PTE_W|PTE_P);
-		if(r < 0)	
-		{
-			panic("No free pages for exception stack %d\n",r);
-		} else {
-			cprintf("SRHS: about to call handler setup\n");
-			r = sys_env_set_pgfault_upcall(thisenv->env_id, _pgfault_upcall);
-			if(r < 0)
-			{
-cprintf("SRHS: pgfault_upcall failed\n");
-				panic("Could not set the specified page fault handler\n");
-			}
-		}
+		//panic("set_pgfault_handler not implemented");
+		int r;
+		r = sys_page_alloc(thisenv->env_id, (void *)(UXSTACKTOP - PGSIZE), PTE_P | PTE_U | PTE_W);
+		if ( r != 0)
+			panic("set_pgfault_handler: sys_page_alloc failed.");
+			
+		if (sys_env_set_pgfault_upcall(thisenv->env_id, _pgfault_upcall) < 0)
+		 	panic("sys_env_set_pgfault_upcall failed");
+
+			
 	}
 
+	
 	// Save handler pointer for assembly to call.
 	_pgfault_handler = handler;
 }
