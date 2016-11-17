@@ -1,0 +1,27 @@
+trap.c:	print_regs(&tf->tf_regs);
+trap.c:	cprintf("  es   0x----%04x\n", tf->tf_es);
+trap.c:	cprintf("  ds   0x----%04x\n", tf->tf_ds);
+trap.c:	cprintf("  trap 0x%08x %s\n", tf->tf_trapno, trapname(tf->tf_trapno));
+trap.c:	if (tf == last_tf && tf->tf_trapno == T_PGFLT)
+trap.c:	cprintf("  err  0x%08x", tf->tf_err);
+trap.c:	if (tf->tf_trapno == T_PGFLT)
+trap.c:			tf->tf_err & 4 ? "user" : "kernel",
+trap.c:			tf->tf_err & 2 ? "write" : "read",
+trap.c:			tf->tf_err & 1 ? "protection" : "not-present");
+trap.c:	cprintf("  eip  0x%08x\n", tf->tf_eip);
+trap.c:	cprintf("  cs   0x----%04x\n", tf->tf_cs);
+trap.c:	cprintf("  flag 0x%08x\n", tf->tf_eflags);
+trap.c:	if ((tf->tf_cs & 3) != 0) {
+trap.c:		cprintf("  esp  0x%08x\n", tf->tf_esp);
+trap.c:		cprintf("  ss   0x----%04x\n", tf->tf_ss);
+trap.c:	if (tf->tf_trapno == IRQ_OFFSET + IRQ_SPURIOUS) {
+trap.c:	if (tf->tf_trapno == T_PGFLT) {
+trap.c:	if (tf->tf_trapno == T_BRKPT) {
+trap.c:	if (tf->tf_trapno == T_SYSCALL) {
+trap.c:		tf->tf_regs.reg_eax = 
+trap.c:			syscall(tf->tf_regs.reg_eax, tf->tf_regs.reg_edx, tf->tf_regs.reg_ecx,
+trap.c:				tf->tf_regs.reg_ebx, tf->tf_regs.reg_edi, tf->tf_regs.reg_esi);
+trap.c:	if (tf->tf_cs == GD_KT)
+trap.c:	if ((tf->tf_cs & 3) == 3) {
+trap.c:	if (tf->tf_cs== GD_KT)
+trap.c:		curenv->env_id, fault_va, tf->tf_eip);

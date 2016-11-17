@@ -93,27 +93,38 @@ trap_init(void)
 	void simd_floating_point_error();
 	void system_call();
 	
+	void fun_timer();
+	void fun_kbd();
+	void fun_serial();
+	void fun_spurious();
+	void fun_ide();
+	void fun_error();
 	
-	SETGATE(idt[T_DIVIDE],1,GD_KT,divide_error,0);
-	SETGATE(idt[T_DEBUG], 1, GD_KT, debug_exception, 0);
-	SETGATE(idt[T_NMI], 1, GD_KT, non_maskable_interrupt, 0);
-	SETGATE(idt[T_BRKPT], 1, GD_KT, break_point, 3);
-	SETGATE(idt[T_OFLOW], 1, GD_KT, over_flow, 0);
-	SETGATE(idt[T_BOUND], 1, GD_KT, bounds_check, 0);
-	SETGATE(idt[T_ILLOP], 1, GD_KT, illegal_opcode, 0);
-	SETGATE(idt[T_DEVICE], 1, GD_KT, device_not_available, 0);
-	SETGATE(idt[T_DBLFLT], 1, GD_KT, double_fault, 0);
-	SETGATE(idt[T_TSS], 1, GD_KT, task_segment_switch, 0);
-	SETGATE(idt[T_SEGNP], 1, GD_KT, segment_not_present, 0);
-	SETGATE(idt[T_STACK], 1, GD_KT, stack_exception, 0);
-	SETGATE(idt[T_GPFLT], 1, GD_KT, general_protection_fault, 0);
-	SETGATE(idt[T_PGFLT], 1, GD_KT, page_fault, 0);
-	SETGATE(idt[T_FPERR], 1, GD_KT, floating_point_error, 0);
-	SETGATE(idt[T_ALIGN], 1, GD_KT, alignment_check , 0);
-	SETGATE(idt[T_MCHK], 1, GD_KT, machine_check, 0);
-	SETGATE(idt[T_SIMDERR], 1, GD_KT, simd_floating_point_error, 0);
-	SETGATE(idt[T_SYSCALL], 1 , GD_KT, system_call, 3);
-	
+	SETGATE(idt[T_DIVIDE],0,GD_KT,divide_error,0);
+	SETGATE(idt[T_DEBUG], 0, GD_KT, debug_exception, 0);
+	SETGATE(idt[T_NMI], 0, GD_KT, non_maskable_interrupt, 0);
+	SETGATE(idt[T_BRKPT], 0, GD_KT, break_point, 3);
+	SETGATE(idt[T_OFLOW], 0, GD_KT, over_flow, 0);
+	SETGATE(idt[T_BOUND], 0, GD_KT, bounds_check, 0);
+	SETGATE(idt[T_ILLOP], 0, GD_KT, illegal_opcode, 0);
+	SETGATE(idt[T_DEVICE], 0, GD_KT, device_not_available, 0);
+	SETGATE(idt[T_DBLFLT], 0, GD_KT, double_fault, 0);
+	SETGATE(idt[T_TSS], 0, GD_KT, task_segment_switch, 0);
+	SETGATE(idt[T_SEGNP], 0, GD_KT, segment_not_present, 0);
+	SETGATE(idt[T_STACK], 0, GD_KT, stack_exception, 0);
+	SETGATE(idt[T_GPFLT], 0, GD_KT, general_protection_fault, 0);
+	SETGATE(idt[T_PGFLT], 0, GD_KT, page_fault, 0);
+	SETGATE(idt[T_FPERR], 0, GD_KT, floating_point_error, 0);
+	SETGATE(idt[T_ALIGN], 0, GD_KT, alignment_check , 0);
+	SETGATE(idt[T_MCHK], 0, GD_KT, machine_check, 0);
+	SETGATE(idt[T_SIMDERR], 0, GD_KT, simd_floating_point_error, 0);
+	SETGATE(idt[T_SYSCALL], 0 , GD_KT, system_call, 3);
+	SETGATE(idt[IRQ_OFFSET + IRQ_TIMER], 0 , GD_KT, fun_timer, 0);
+	SETGATE(idt[IRQ_OFFSET + IRQ_KBD], 0 , GD_KT, fun_kbd, 0);
+	SETGATE(idt[IRQ_OFFSET + IRQ_SERIAL], 0 , GD_KT, fun_serial, 0);
+	SETGATE(idt[IRQ_OFFSET + IRQ_SPURIOUS], 0 , GD_KT, fun_spurious, 0);
+	SETGATE(idt[IRQ_OFFSET + IRQ_IDE], 0 , GD_KT, fun_ide, 0);
+	SETGATE(idt[IRQ_OFFSET + IRQ_ERROR], 0 , GD_KT, fun_error, 0);
 	// Per-CPU setup 
 	trap_init_percpu();
 }
@@ -230,6 +241,13 @@ trap_dispatch(struct Trapframe *tf)
 	// Handle clock interrupts. Don't forget to acknowledge the
 	// interrupt using lapic_eoi() before calling the scheduler!
 	// LAB 4: Your code here.
+	if(tf->tf_trapno == (IRQ_OFFSET + IRQ_TIMER)) {
+cprintf("SRHS: timer interrupt is here\n");
+		lapic_eoi();
+                sched_yield();
+		return;
+        }
+
 
 	if (tf->tf_trapno == T_PGFLT) {
 		page_fault_handler(tf);
@@ -245,7 +263,6 @@ trap_dispatch(struct Trapframe *tf)
 				tf->tf_regs.reg_ebx, tf->tf_regs.reg_edi, tf->tf_regs.reg_esi);
 		return;
 	}
-	
 	// Unexpected trap: The user process or the kernel has a bug.
 	print_trapframe(tf);
 	if (tf->tf_cs == GD_KT)

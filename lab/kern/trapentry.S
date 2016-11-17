@@ -69,6 +69,12 @@
         TRAPHANDLER_NOEC(machine_check, 18)
         TRAPHANDLER_NOEC(simd_floating_point_error, 19)
         TRAPHANDLER_NOEC(system_call, 48)
+        TRAPHANDLER_NOEC(fun_timer, IRQ_OFFSET + IRQ_TIMER)
+        TRAPHANDLER_NOEC(fun_kbd, IRQ_OFFSET + IRQ_KBD)
+        TRAPHANDLER_NOEC(fun_spurious, IRQ_OFFSET + IRQ_SPURIOUS)
+        TRAPHANDLER_NOEC(fun_error, IRQ_OFFSET + IRQ_ERROR)
+        TRAPHANDLER_NOEC(fun_ide, IRQ_OFFSET + IRQ_IDE)
+        TRAPHANDLER_NOEC(fun_serial, IRQ_OFFSET + IRQ_SERIAL)
     
 /*
  * Lab 3: Your code here for _alltraps
