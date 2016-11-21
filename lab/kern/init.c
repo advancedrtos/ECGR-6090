@@ -63,13 +63,12 @@ i386_init(void)
 #else
 	// Touch all you want.
 
-//	ENV_CREATE(user_icode, ENV_TYPE_USER);
+//	ENV_CREATE(user_icode, ENV_TYPE_FS);
 
-	ENV_CREATE(user_forktree, ENV_TYPE_USER);
+//	ENV_CREATE(user_forktree, ENV_TYPE_USER);
 //	ENV_CREATE(user_yield, ENV_TYPE_USER);
 //	ENV_CREATE(user_yield, ENV_TYPE_USER);
 //	ENV_CREATE(user_dumbfork, ENV_TYPE_USER);
-	cprintf("SRHS: all 3 env created\n");
 
 #endif // TEST*
 
