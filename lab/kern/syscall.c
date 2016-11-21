@@ -9,6 +9,7 @@
 #include <kern/syscall.h>
 #include <kern/console.h>
 #include <kern/sched.h>
+#include <kern/time.h>
 
 // Print a string to the system console.
 // The string is exactly 'len' characters long.
@@ -143,8 +144,7 @@ sys_env_set_trapframe(envid_t envid, struct Trapframe *tf)
 	// LAB 5: Your code here.
 	// Remember to check whether the user has supplied us with a good
 	// address!
-//	panic("sys_env_set_trapframe not implemented");
-
+	//panic("sys_env_set_trapframe not implemented");
 	int ret;
 	struct Env *env;
 
@@ -476,6 +476,14 @@ sys_ipc_recv(void *dstva)
 	//return 0;
 }
 
+// Return the current time.
+static int
+sys_time_msec(void)
+{
+	// LAB 6: Your code here.
+	panic("sys_time_msec not implemented");
+}
+
 // Dispatches to the correct kernel function, passing the arguments.
 int32_t
 syscall(uint32_t syscallno, uint32_t a1, uint32_t a2, uint32_t a3, uint32_t a4, uint32_t a5)
@@ -523,9 +531,9 @@ syscall(uint32_t syscallno, uint32_t a1, uint32_t a2, uint32_t a3, uint32_t a4, 
 			break;
 		case SYS_ipc_try_send:
 			return sys_ipc_try_send(a1, a2, (void *)a3, a4);
-			break;
-		case SYS_env_set_trapframe: 
+			case SYS_env_set_trapframe: 
 			return sys_env_set_trapframe(a1, (struct Trapframe *)a2);
+			break;
 		case NSYSCALLS:
 			break;
 		default:

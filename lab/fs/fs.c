@@ -62,7 +62,7 @@ alloc_block(void)
 	// super->s_nblocks blocks in the disk altogether.
 
 	// LAB 5: Your code here.
-//	panic("alloc_block not implemented");
+	//panic("alloc_block not implemented");
 	uint32_t blockno = 0;
 	while(blockno < super->s_nblocks)
 	{
@@ -80,7 +80,7 @@ alloc_block(void)
                         }
 		}
 	}
-	//panic("SRHS: testing in preogress for alloc_block \n");
+	
 	return -E_NO_DISK;
 }
 
@@ -153,8 +153,8 @@ static int
 file_block_walk(struct File *f, uint32_t filebno, uint32_t **ppdiskbno, bool alloc)
 {
        // LAB 5: Your code here.
-//       panic("file_block_walk not implemented");
-	uint32_t ret;
+       //panic("file_block_walk not implemented");
+       uint32_t ret;
 	if(filebno >= (NDIRECT+NINDIRECT))
 	{
 		return -E_INVAL;
@@ -197,8 +197,8 @@ int
 file_get_block(struct File *f, uint32_t filebno, char **blk)
 {
        // LAB 5: Your code here.
-//       panic("file_get_block not implemented");
-	uint32_t ret;
+       //panic("file_get_block not implemented");
+       	uint32_t ret;
 	uint32_t *block;
 	if(filebno >= (NDIRECT+NINDIRECT))
         {
