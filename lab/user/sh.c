@@ -64,7 +64,6 @@ again:
                                 dup(fd, 0);
                                 close(fd);
                         }
-
 			break;
 
 		case '>':	// Output redirection
