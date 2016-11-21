@@ -301,6 +301,19 @@ static int
 copy_shared_pages(envid_t child)
 {
 	// LAB 5: Your code here.
+	uint32_t pn;
+	int r;
+	for (pn = 0; pn < (PGNUM(UXSTACKTOP)-2); pn++)
+	{
+                if((uvpd[PDX(pn*PGSIZE)] & PTE_P) && (uvpt[pn] & PTE_SHARE) && (uvpt[pn] & PTE_P))
+		{
+                        if ((r = sys_page_map(thisenv->env_id, (void *)(pn*PGSIZE), child, 
+				(void *)(pn*PGSIZE), (uvpt[pn]&PTE_SYSCALL))) < 0)
+                        	panic("spawn: sys_page_map: %e", r);
+
+		}
+        }
+
 	return 0;
 }
 

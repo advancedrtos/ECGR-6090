@@ -85,13 +85,19 @@ duppage(envid_t envid, unsigned pn)
 	int perm = (PTE_P|PTE_U);   //PTE_AVAIL ???
 
 
-	if((uvpt[pn] & (PTE_W)) || (uvpt[pn] & (PTE_COW)))
+	if((uvpt[pn] & (PTE_W)) || (uvpt[pn] & (PTE_COW)) || (uvpt[pn] & PTE_SHARE))
 	{
+		if(uvpt[pn] & PTE_SHARE)
+		{
+			perm = (uvpt[pn] & PTE_SYSCALL); 
+		} else if((uvpt[pn] & (PTE_W)) || (uvpt[pn] & (PTE_COW))) {
+			perm = PTE_P|PTE_U|PTE_COW;
+		}
 
-		if ((r = sys_page_map(0, (void *)(pn*PGSIZE), envid, (void *)(pn*PGSIZE), (perm | PTE_COW))) < 0)
+		if ((r = sys_page_map(0, (void *)(pn*PGSIZE), envid, (void *)(pn*PGSIZE), (perm))) < 0)
 			panic("fork: sys_page_map: %e", r);
 		
-		if ((r = sys_page_map(0, (void *)(pn*PGSIZE), 0, (void *)(pn*PGSIZE), (perm|PTE_COW))) < 0)
+		if ((r = sys_page_map(0, (void *)(pn*PGSIZE), 0, (void *)(pn*PGSIZE), (perm))) < 0)
 			panic("fork: sys_page_map: %e", r);
 	}
 	else{
