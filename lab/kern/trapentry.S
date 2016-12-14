@@ -75,6 +75,7 @@
         TRAPHANDLER_NOEC(fun_error, IRQ_OFFSET + IRQ_ERROR)
         TRAPHANDLER_NOEC(fun_ide, IRQ_OFFSET + IRQ_IDE)
         TRAPHANDLER_NOEC(fun_serial, IRQ_OFFSET + IRQ_SERIAL)
+        //TRAPHANDLER_NOEC(fun_e1000, IRQ_OFFSET + IRQ_E1000)
     
 /*
  * Lab 3: Your code here for _alltraps

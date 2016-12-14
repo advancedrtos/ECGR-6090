@@ -100,6 +100,7 @@ trap_init(void)
 	void fun_spurious();
 	void fun_ide();
 	void fun_error();
+	void fun_e1000();
 	
 	SETGATE(idt[T_DIVIDE],0,GD_KT,divide_error,0);
 	SETGATE(idt[T_DEBUG], 0, GD_KT, debug_exception, 0);
@@ -126,6 +127,7 @@ trap_init(void)
 	SETGATE(idt[IRQ_OFFSET + IRQ_SPURIOUS], 0 , GD_KT, fun_spurious, 0);
 	SETGATE(idt[IRQ_OFFSET + IRQ_IDE], 0 , GD_KT, fun_ide, 0);
 	SETGATE(idt[IRQ_OFFSET + IRQ_ERROR], 0 , GD_KT, fun_error, 0);
+	//SETGATE(idt[IRQ_OFFSET + IRQ_E1000], 0, GD_KT, fun_e1000, 0);
 	// Per-CPU setup 
 	trap_init_percpu();
 }
@@ -243,8 +245,9 @@ trap_dispatch(struct Trapframe *tf)
 	// interrupt using lapic_eoi() before calling the scheduler!
 	// LAB 4: Your code here.
 	if(tf->tf_trapno == (IRQ_OFFSET + IRQ_TIMER)) {
-cprintf("SRHS: timer interrupt is here\n");
+		//cprintf("SRHS: timer interrupt is here\n");
 		lapic_eoi();
+		time_tick();
                 sched_yield();
 		return;
         }
