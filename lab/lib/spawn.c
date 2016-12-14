@@ -307,8 +307,7 @@ copy_shared_pages(envid_t child)
 	{
                 if((uvpd[PDX(pn*PGSIZE)] & PTE_P) && (uvpt[pn] & PTE_SHARE) && (uvpt[pn] & PTE_P))
 		{
-                        if ((r = sys_page_map(thisenv->env_id, (void *)(pn*PGSIZE), child, 
-				(void *)(pn*PGSIZE), (uvpt[pn]&PTE_SYSCALL))) < 0)
+                        if ((r = sys_page_map(thisenv->env_id, (void *)(pn*PGSIZE), child, (void *)(pn*PGSIZE), (uvpt[pn]&PTE_SYSCALL))) < 0)
                         	panic("spawn: sys_page_map: %e", r);
 
 		}
